@@ -1,0 +1,38 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:textAlignment="center"
+    tools:context=".MainActivity" >
+
+    <TextView
+        android:id="@+id/tv_kosher"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/kosherfood" />
+    
+    <Button
+        android:id="@+id/btn_start"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/start"/>
+    
+    <Button
+        android:id="@+id/btn_options"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/options"/>
+    
+    <Button
+        android:id="@+id/btn_exit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/exit"/>
+
+</LinearLayout>

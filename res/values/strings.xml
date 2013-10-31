@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">KosherFood</string>
+    <string name="action_settings">Settings</string>
+    <string name="kosherfood">Kosher Food</string>
+    <string name="start">Start</string>
+    <string name="options">Options</string>
+    <string name="exit">Exit</string>
+    <string name="title_activity_kosher_surface">KosherSurfaceActivity</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="title_activity_options">OptionsActivity</string>
+    <string name="title_activity_food">FoodActivity</string>
+
+</resources>
