@@ -14,41 +14,67 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		
-		Button btn_start = (Button)findViewById(R.id.btn_start);
+
+		Button btn_start = (Button) findViewById(R.id.btn_start);
 		btn_start.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				Intent openSurface = new Intent();
-				openSurface.setClass(getApplicationContext(), KosherSurfaceActivity.class);
+				openSurface.setClass(getApplicationContext(),
+						KosherSurfaceActivity.class);
 				startActivity(openSurface);
-				
+
 			}
 		});
-		
-		Button btn_options = (Button)findViewById(R.id.btn_options);
+
+		Button btn_high_scores = (Button) findViewById(R.id.btn_high_scores);
+		btn_high_scores.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				Intent openHighScores = new Intent();
+				openHighScores.setClass(getApplicationContext(),
+						HighScoresActivity.class);
+				startActivity(openHighScores);
+
+			}
+		});
+
+		Button btn_options = (Button) findViewById(R.id.btn_options);
 		btn_options.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				Intent openOptions = new Intent();
-				openOptions.setClass(getApplicationContext(), OptionsActivity.class);
+				openOptions.setClass(getApplicationContext(),
+						OptionsActivity.class);
 				startActivity(openOptions);
-				
+
 			}
 		});
-		
-		Button btn_exit = (Button)findViewById(R.id.btn_exit);
+
+		Button btn_help = (Button) findViewById(R.id.btn_help);
+		btn_help.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				Intent openHelp = new Intent();
+				openHelp.setClass(getApplicationContext(), HelpActivity.class);
+				startActivity(openHelp);
+
+			}
+		});
+
+		Button btn_exit = (Button) findViewById(R.id.btn_exit);
 		btn_exit.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				finish();
-				
+
 			}
 		});
 	}
-
 
 }

@@ -9,7 +9,11 @@
     <string name="exit">Exit</string>
     <string name="title_activity_kosher_surface">KosherSurfaceActivity</string>
     <string name="hello_world">Hello world!</string>
-    <string name="title_activity_options">OptionsActivity</string>
-    <string name="title_activity_food">FoodActivity</string>
+    <string name="title_activity_options">Options</string>
+    <string name="title_activity_food">Food</string>
+    <string name="title_activity_high_scores">High Scores</string>
+    <string name="title_activity_help">Help</string>
+    <string name="help">Help</string>
+    <string name="high_scores">High Scores</string>
 
 </resources>

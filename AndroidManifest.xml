@@ -24,7 +24,10 @@
         </activity>
         <activity
             android:name="hu.bme.aut.amorg.nyekilajos.kosherfood.activities.KosherSurfaceActivity"
-            android:label="@string/title_activity_kosher_surface" >
+            android:label="@string/title_activity_kosher_surface"
+            android:screenOrientation="landscape"
+            android:hardwareAccelerated="true"
+            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" >
         </activity>
         <activity
             android:name="hu.bme.aut.amorg.nyekilajos.kosherfood.activities.OptionsActivity"
@@ -33,6 +36,14 @@
         <activity
             android:name="hu.bme.aut.amorg.nyekilajos.kosherfood.activities.FoodActivity"
             android:label="@string/title_activity_food" >
+        </activity>
+        <activity
+            android:name="hu.bme.aut.amorg.nyekilajos.kosherfood.activities.HighScoresActivity"
+            android:label="@string/title_activity_high_scores" >
+        </activity>
+        <activity
+            android:name="hu.bme.aut.amorg.nyekilajos.kosherfood.activities.HelpActivity"
+            android:label="@string/title_activity_help" >
         </activity>
     </application>
 
