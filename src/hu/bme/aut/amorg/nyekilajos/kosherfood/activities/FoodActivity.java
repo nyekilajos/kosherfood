@@ -1,5 +1,6 @@
-package hu.bme.aut.amorg.nyekilajos.kosherfood;
+package hu.bme.aut.amorg.nyekilajos.kosherfood.activities;
 
+import hu.bme.aut.amorg.nyekilajos.kosherfood.R;
 import android.os.Bundle;
 import android.app.Activity;
 import android.view.Menu;

@@ -14,7 +14,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="hu.bme.aut.amorg.nyekilajos.kosherfood.MainActivity"
+            android:name="hu.bme.aut.amorg.nyekilajos.kosherfood.activities.MainActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -23,15 +23,15 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="hu.bme.aut.amorg.nyekilajos.kosherfood.KosherSurfaceActivity"
+            android:name="hu.bme.aut.amorg.nyekilajos.kosherfood.activities.KosherSurfaceActivity"
             android:label="@string/title_activity_kosher_surface" >
         </activity>
         <activity
-            android:name="hu.bme.aut.amorg.nyekilajos.kosherfood.OptionsActivity"
+            android:name="hu.bme.aut.amorg.nyekilajos.kosherfood.activities.OptionsActivity"
             android:label="@string/title_activity_options" >
         </activity>
         <activity
-            android:name="hu.bme.aut.amorg.nyekilajos.kosherfood.FoodActivity"
+            android:name="hu.bme.aut.amorg.nyekilajos.kosherfood.activities.FoodActivity"
             android:label="@string/title_activity_food" >
         </activity>
     </application>
