@@ -1,17 +1,18 @@
 package hu.bme.aut.amorg.nyekilajos.kosherfood.core;
 
-public class Food {
+import android.graphics.Bitmap;
+
+public class Food extends Drawable{
 
 	private int id;
 	private String name;
-	private float x;
-	private float y;
 
-	public Food(int _id, String _name, float init_x, float init_y) {
+	public Food(int _id, String _name, float init_x, float init_y, Bitmap _picture) {
 		id = _id;
 		name = _name;
 		x = init_x;
 		y = init_y;
+		picture = _picture;
 	}
 
 	public int getId() {
@@ -30,20 +31,5 @@ public class Food {
 		this.name = name;
 	}
 
-	public float getX() {
-		return x;
-	}
-
-	public void setX(float x) {
-		this.x = x;
-	}
-
-	public float getY() {
-		return y;
-	}
-
-	public void setY(float y) {
-		this.y = y;
-	}
 
 }

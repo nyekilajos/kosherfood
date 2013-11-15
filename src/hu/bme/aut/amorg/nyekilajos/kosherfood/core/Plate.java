@@ -3,17 +3,18 @@ package hu.bme.aut.amorg.nyekilajos.kosherfood.core;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Plate {
+import android.graphics.Bitmap;
+
+public class Plate extends Drawable {
 
 	private int id;
-	private float x;
-	private float y;
 	private List<Food> foodsInPlate;
 
-	public Plate(int _id, float init_x, float init_y) {
+	public Plate(int _id, float init_x, float init_y, Bitmap _picture) {
 		id = _id;
 		x = init_x;
 		y = init_y;
+		picture = _picture;
 
 		foodsInPlate = new ArrayList<Food>();
 	}

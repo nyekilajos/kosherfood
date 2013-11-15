@@ -4,13 +4,18 @@ import android.content.Context;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
-public class KosherSurface extends SurfaceView implements SurfaceHolder.Callback {
+public class KosherSurface extends SurfaceView implements
+		SurfaceHolder.Callback {
 
 	private KosherGame kosherGame;
 	private Settings settings;
 	private GameThread gameThread;
-	
-	
+
+	public KosherSurface(Context context)
+	{
+		super(context);
+		
+	}
 	
 	public KosherSurface(Context context, Settings settings) {
 		super(context);
@@ -21,20 +26,30 @@ public class KosherSurface extends SurfaceView implements SurfaceHolder.Callback
 	public void surfaceChanged(SurfaceHolder holder, int format, int width,
 			int height) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void surfaceCreated(SurfaceHolder holder) {
-		// TODO Auto-generated method stub
-		
+		kosherGame = new KosherGame(settings, this);
+		gameThread = new GameThread(holder, kosherGame);
+		gameThread.start();
+
 	}
 
+	// TODO Is it working really?
 	@Override
 	public void surfaceDestroyed(SurfaceHolder holder) {
-		// TODO Auto-generated method stub
-		
+		boolean retry = true;
+		gameThread.stopRunning();
+		while (retry) {
+			try {
+				gameThread.join();
+				retry = false;
+			} catch (InterruptedException e) {
+
+			}
+		}
 	}
-	
 
 }
