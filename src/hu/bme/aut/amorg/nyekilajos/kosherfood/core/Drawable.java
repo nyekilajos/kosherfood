@@ -64,7 +64,8 @@ public class Drawable {
 	}
 
 	public void doDraw(Canvas canvas) {
-		canvas.drawBitmap(picture, null, getRectF(), null);
+		if (picture != null)
+			canvas.drawBitmap(picture, null, getRectF(), null);
 	}
 
 }
