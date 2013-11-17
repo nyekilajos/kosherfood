@@ -47,6 +47,9 @@ public class KosherSurface extends SurfaceView implements
 	@Override
 	public void surfaceDestroyed(SurfaceHolder holder) {
 		boolean retry = true;
+		
+		kosherGame.freeResources();
+		
 		gameThread.stopRunning();
 		while (retry) {
 			try {

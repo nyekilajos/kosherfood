@@ -68,4 +68,9 @@ public class Drawable {
 			canvas.drawBitmap(picture, null, getRectF(), null);
 	}
 
+	public void freeResources() {
+		if (picture != null)
+			picture.recycle();
+	}
+
 }
