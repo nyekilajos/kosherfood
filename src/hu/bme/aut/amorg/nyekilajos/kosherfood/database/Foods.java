@@ -3,9 +3,9 @@ package hu.bme.aut.amorg.nyekilajos.kosherfood.database;
 public class Foods {
 
 	private int _id;
-	private int name;
+	private String name;
 	private int is_kosher;
-	private int information;
+	private String information;
 
 	public int get_id() {
 		return _id;
@@ -15,11 +15,11 @@ public class Foods {
 		this._id = _id;
 	}
 
-	public int getName() {
+	public String getName() {
 		return name;
 	}
 
-	public void setName(int name) {
+	public void setName(String name) {
 		this.name = name;
 	}
 
@@ -31,11 +31,11 @@ public class Foods {
 		this.is_kosher = is_kosher;
 	}
 
-	public int getInformation() {
+	public String getInformation() {
 		return information;
 	}
 
-	public void setInformation(int information) {
+	public void setInformation(String information) {
 		this.information = information;
 	}
 

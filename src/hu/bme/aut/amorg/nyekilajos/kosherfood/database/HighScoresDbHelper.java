@@ -18,8 +18,8 @@ public class HighScoresDbHelper extends SQLiteOpenHelper {
 	private static final String DATABASE_CREATE = "create table "
 			+ HIGH_SCORES_TABLE 
 			+ "(" 
-			+ COLUMN_ID + " integer primary key, "
-			+ COLUMN_NAME + " text not null " 
+			+ COLUMN_ID + " integer primary key autoincrement, "
+			+ COLUMN_NAME + " text not null, " 
 			+ COLUMN_SCORE + " integer not null);";
 
 	public HighScoresDbHelper(Context context) {

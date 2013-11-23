@@ -21,8 +21,21 @@ public class Plate extends Drawable {
 		foodsInPlate = new ArrayList<Food>();
 	}
 
-	public KosherDbObj getKosherDbObj() {
-		return new KosherDbObj(true, "Here comes the info about this!");
+	/**Call only from background thread
+	 * 
+	 * IsKosherAsync (AsyncTask) calls it in doInBackground function.**/
+	public KosherDbObj searchDatabase()
+	{
+		return null;
+		
+	}
+	
+	/**IsKosherAsync (AsyncTask) calls it in onPostExecute function when searchDatabase function is ready.
+	 * 
+	 * This function is called in the original thread**/
+	public void postDbResultCallback(KosherDbObj kosherDbObj)
+	{
+		
 	}
 
 	public int getId() {
@@ -32,13 +45,19 @@ public class Plate extends Drawable {
 	public void setId(int id) {
 		this.id = id;
 	}
-
-	public List<Food> getFoodsInPlate() {
-		return foodsInPlate;
+	
+	public void addFoodToPlate(Food food)
+	{
+		foodsInPlate.add(food);
+		IsKosherAsync isKosherAsync = new IsKosherAsync(this);
+		isKosherAsync.execute();
 	}
-
-	public void setFoodsInPlate(List<Food> foodsInPlate) {
-		this.foodsInPlate = foodsInPlate;
+	
+	public List<Food> removeFoodsFromPlate()
+	{
+		List<Food> removed = new ArrayList<Food>(foodsInPlate);
+		foodsInPlate.clear();
+		return removed;
 	}
 
 	

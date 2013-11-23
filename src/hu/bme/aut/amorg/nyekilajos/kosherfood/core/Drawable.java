@@ -10,9 +10,17 @@ public class Drawable {
 	protected Bitmap picture;
 	protected float x;
 	protected float y;
+	protected float init_x;
+	protected float init_y;
 	protected float width;
 	protected float height;
 
+	public void initCoordinates()
+	{
+		x = init_x;
+		y = init_y;
+	}
+	
 	public Bitmap getPiture() {
 		return picture;
 	}

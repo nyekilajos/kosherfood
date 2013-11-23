@@ -7,11 +7,13 @@ public class Food extends Drawable{
 	private int id;
 	private String name;
 
-	public Food(int _id, String _name, float init_x, float init_y, Bitmap _picture, float _width, float _height) {
+	public Food(int _id, String _name, float _init_x, float _init_y, Bitmap _picture, float _width, float _height) {
 		id = _id;
 		name = _name;
-		x = init_x;
-		y = init_y;
+		x = _init_x;
+		y = _init_y;
+		init_x = _init_x;
+		init_y = _init_y;
 		width = _width;
 		height = _height;
 		picture = _picture;
