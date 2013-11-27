@@ -50,12 +50,24 @@ public class FoodsDataSource implements DataSourceInterface {
 	public Foods getFood(int _id) {
 		Cursor cursor = database.query(KosherDbHelper.FOODS_TABLE, allColumns,
 				KosherDbHelper.COLUMN_ID + "=" + _id, null, null, null, null);
+		if (cursor == null)
+			return null;
+		cursor.moveToFirst();
 		Foods food = new Foods();
-		food.set_id(cursor.getInt(0));
-		food.setName(cursor.getString(1));
-		food.setIs_kosher(cursor.getInt(2));
-		food.setInformation(cursor.getString(3));
+		food.set_id(cursor.getInt(cursor
+				.getColumnIndex(KosherDbHelper.COLUMN_ID)));
+		food.setName(cursor.getString(cursor
+				.getColumnIndex(KosherDbHelper.COLUMN_NAME)));
+		food.setIs_kosher(cursor.getInt(cursor
+				.getColumnIndex(KosherDbHelper.COLUMN_IS_KOSHER)));
+		food.setInformation(cursor.getString(cursor
+				.getColumnIndex(KosherDbHelper.COLUMN_INFORMATION)));
 		cursor.close();
 		return food;
+	}
+
+	public void truncateFoods() {
+		database.rawQuery("delete from " + KosherDbHelper.FOODS_TABLE + ";",
+				null);
 	}
 }

@@ -95,13 +95,13 @@ public class KosherGame {
 				hu.bme.aut.amorg.nyekilajos.kosherfood.R.drawable.plate, opts);
 
 		synchronized (plates) {
-			plates.add(new Plate(11, 90, 80, platePicture, 180, 160));
+			plates.add(new Plate(11, 90, 80, platePicture, 180, 160, this));
 			plates.add(new Plate(12, kosherSurface.getWidth() - 90, 80,
-					platePicture, 180, 160));
+					platePicture, 180, 160, this));
 			plates.add(new Plate(13, 90, kosherSurface.getHeight() - 80,
-					platePicture, 180, 160));
+					platePicture, 180, 160, this));
 			plates.add(new Plate(14, kosherSurface.getWidth() - 90,
-					kosherSurface.getHeight() - 80, platePicture, 180, 160));
+					kosherSurface.getHeight() - 80, platePicture, 180, 160, this));
 		}
 
 	}
@@ -110,6 +110,7 @@ public class KosherGame {
 		FoodsDataSource foodsDataSource = new FoodsDataSource(
 				kosherSurfaceActivity);
 		foodsDataSource.open();
+		foodsDataSource.truncateFoods();
 
 		Foods food = new Foods();
 
@@ -136,7 +137,8 @@ public class KosherGame {
 		NotKosherPairsDataSource notKosherPairsDataSource = new NotKosherPairsDataSource(
 				kosherSurfaceActivity);
 		notKosherPairsDataSource.open();
-
+		notKosherPairsDataSource.truncateNotKosherPairs();
+		
 		NotKosherPairs notKosherPairs = new NotKosherPairs();
 
 		notKosherPairs.setFood_first_id(2);
@@ -240,6 +242,12 @@ public class KosherGame {
 				}
 			}
 	}
+	
+	public KosherSurfaceActivity getKosherSurfaceActivity()
+	{
+		return kosherSurfaceActivity;
+	}
+	
 
 	public void doDraw(Canvas canvas) {
 		if (canvas == null)

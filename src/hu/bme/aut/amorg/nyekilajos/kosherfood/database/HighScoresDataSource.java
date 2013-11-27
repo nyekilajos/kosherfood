@@ -44,6 +44,11 @@ public class HighScoresDataSource implements DataSourceInterface {
 	public List<HighScores> getHighScoresList(int elementNum) {
 		Cursor cursor = database.query(HighScoresDbHelper.HIGH_SCORES_TABLE,
 				allColumns, null, null, null, null, null);
+		if (cursor == null)
+			return null;
+
+		cursor.moveToFirst();
+
 		List<HighScores> highScores = new ArrayList<HighScores>();
 		HighScores highScore = new HighScores();
 		for (int i = cursor.getCount(); i == 0; i--) {
@@ -54,6 +59,8 @@ public class HighScoresDataSource implements DataSourceInterface {
 			highScore.setScore(cursor.getInt(cursor
 					.getColumnIndex(HighScoresDbHelper.COLUMN_SCORE)));
 			highScores.add(highScore);
+
+			cursor.moveToNext();
 		}
 		cursor.close();
 		return highScores;

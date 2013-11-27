@@ -32,13 +32,16 @@ public class NotKosherPairsDataSource implements DataSourceInterface {
 
 	public NotKosherPairs insert(NotKosherPairs notKosherPairs) {
 		ContentValues values = new ContentValues();
-		values.put(KosherDbHelper.COLUMN_FOOD_ID_SECOND,
+		String nullString = null;
+		values.put(KosherDbHelper.COLUMN_ID, nullString);
+		values.put(KosherDbHelper.COLUMN_FOOD_ID_FIRST,
 				notKosherPairs.getFood_first_id());
 		values.put(KosherDbHelper.COLUMN_FOOD_ID_SECOND,
 				notKosherPairs.getFood_second_id());
 		values.put(KosherDbHelper.COLUMN_INFORMATION,
 				notKosherPairs.getInformation());
-		database.insert(KosherDbHelper.NOT_KOSHER_PAIRS_TABLE, null, values);
+		database.insert(KosherDbHelper.NOT_KOSHER_PAIRS_TABLE,
+				KosherDbHelper.COLUMN_ID, values);
 		return notKosherPairs;
 	}
 
@@ -51,14 +54,37 @@ public class NotKosherPairsDataSource implements DataSourceInterface {
 						+ notKosherPairs.getFood_second_id(), null);
 	}
 
+	/** This function executes a query that look up for appropriate records
+	 * in the given order and in the reverse order as well.
+	 * @param food_first_id
+	 * @param food_second_id
+	 * @return
+	 */
+	
 	public NotKosherPairs getNotKosherPairs(int food_first_id,
 			int food_second_id) {
 		Cursor cursor = database.query(KosherDbHelper.NOT_KOSHER_PAIRS_TABLE,
-				allColumns, KosherDbHelper.COLUMN_FOOD_ID_FIRST + "="
-						+ food_first_id + "AND"
-						+ KosherDbHelper.COLUMN_FOOD_ID_SECOND + "="
+				allColumns, KosherDbHelper.COLUMN_FOOD_ID_FIRST + " = "
+						+ food_first_id + " AND "
+						+ KosherDbHelper.COLUMN_FOOD_ID_SECOND + " = "
 						+ food_second_id, null, null, null, null);
 
+		// Because the sequence of the food is not important, the query must be
+		// executed in reverse order.
+		if (cursor == null || cursor.getCount() == 0) {
+			cursor = database.query(KosherDbHelper.NOT_KOSHER_PAIRS_TABLE,
+					allColumns, KosherDbHelper.COLUMN_FOOD_ID_FIRST + " = "
+							+ food_second_id + " AND "
+							+ KosherDbHelper.COLUMN_FOOD_ID_SECOND + " = "
+							+ food_first_id, null, null, null, null);
+
+			// If there is still no result, then it is not in the database
+			if (cursor == null || cursor.getCount() == 0)
+				return null;
+		}
+
+		// If found appropriate record, it is processed
+		cursor.moveToFirst();
 		NotKosherPairs notKosherPairs = new NotKosherPairs();
 		notKosherPairs.setFood_first_id(cursor.getInt(cursor
 				.getColumnIndex(KosherDbHelper.COLUMN_FOOD_ID_FIRST)));
@@ -70,4 +96,8 @@ public class NotKosherPairsDataSource implements DataSourceInterface {
 		return notKosherPairs;
 	}
 
+	public void truncateNotKosherPairs() {
+		database.rawQuery("delete from "
+				+ KosherDbHelper.NOT_KOSHER_PAIRS_TABLE + ";", null);
+	}
 }

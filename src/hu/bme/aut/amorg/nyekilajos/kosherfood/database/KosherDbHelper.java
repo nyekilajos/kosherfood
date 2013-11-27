@@ -21,7 +21,7 @@ public class KosherDbHelper extends SQLiteOpenHelper {
 	private static final int DATATBASE_VERSION = 1;
 
 	private static final String CREATE_FOODS = "create table " + FOODS_TABLE
-			+ "(" + COLUMN_ID + " integer primary key, " + COLUMN_NAME
+			+ "(" + COLUMN_ID + " integer primary key not null, " + COLUMN_NAME
 			+ " text not null, " + COLUMN_IS_KOSHER + " integer not null, "
 			+ COLUMN_INFORMATION + " text not null);";
 
