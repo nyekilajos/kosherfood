@@ -8,13 +8,15 @@ import hu.bme.aut.amorg.nyekilajos.kosherfood.database.NotKosherPairsDataSource;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.graphics.RectF;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -24,6 +26,9 @@ public class KosherGame {
 	private KosherSurfaceActivity kosherSurfaceActivity;
 	private List<Food> foods;
 	private List<Plate> plates;
+
+	private ScheduledExecutorService scheduledExec;
+	private ScheduledTasks scheduledTasks;
 
 	private Bitmap background = null;
 
@@ -62,8 +67,8 @@ public class KosherGame {
 			foods.add(new Food(
 					1,
 					"pig",
-					100,
-					200,
+					300,
+					300,
 					BitmapFactory.decodeResource(
 							kosherSurface.getResources(),
 							hu.bme.aut.amorg.nyekilajos.kosherfood.R.drawable.pig,
@@ -95,13 +100,14 @@ public class KosherGame {
 				hu.bme.aut.amorg.nyekilajos.kosherfood.R.drawable.plate, opts);
 
 		synchronized (plates) {
-			plates.add(new Plate(11, 90, 80, platePicture, 180, 160, this));
-			plates.add(new Plate(12, kosherSurface.getWidth() - 90, 80,
+			plates.add(new Plate(11, -90, kosherSurface.getHeight() / 2,
 					platePicture, 180, 160, this));
-			plates.add(new Plate(13, 90, kosherSurface.getHeight() - 80,
+			plates.add(new Plate(12, kosherSurface.getWidth() / 2, -80,
 					platePicture, 180, 160, this));
-			plates.add(new Plate(14, kosherSurface.getWidth() - 90,
-					kosherSurface.getHeight() - 80, platePicture, 180, 160, this));
+			plates.add(new Plate(13, kosherSurface.getWidth() + 90, kosherSurface
+					.getHeight() / 2, platePicture, 180, 160, this));
+			plates.add(new Plate(14, kosherSurface.getWidth() / 2,
+					kosherSurface.getHeight() + 80, platePicture, 180, 160, this));
 		}
 
 	}
@@ -138,7 +144,7 @@ public class KosherGame {
 				kosherSurfaceActivity);
 		notKosherPairsDataSource.open();
 		notKosherPairsDataSource.truncateNotKosherPairs();
-		
+
 		NotKosherPairs notKosherPairs = new NotKosherPairs();
 
 		notKosherPairs.setFood_first_id(2);
@@ -150,10 +156,6 @@ public class KosherGame {
 		notKosherPairsDataSource.close();
 	}
 
-	public void startGame() {
-		kosherSurface.startThread();
-	}
-
 	public void setProgressDialog(String message) {
 		kosherSurfaceActivity.showProgressDialog(message);
 	}
@@ -162,17 +164,26 @@ public class KosherGame {
 		kosherSurfaceActivity.dismissProgressDialog();
 	}
 
+	public void startGame() {
+		kosherSurface.startThread();
+		scheduledExec = Executors.newScheduledThreadPool(1);
+		scheduledTasks = new ScheduledTasks(ScheduledTasks.ACTION_INIT_PLATES,
+				this);
+		scheduledExec.scheduleWithFixedDelay(scheduledTasks, 0, 40,
+				TimeUnit.MILLISECONDS);
+	}
+
 	public void onTouch(View v, MotionEvent event) {
 		switch (event.getAction()) {
 		case MotionEvent.ACTION_DOWN:
-			Log.d("ONTOUCH", "ACTION_DOWN");
+			// Log.d("ONTOUCH", "ACTION_DOWN");
 			actualFood = selectTouchableFood(event.getX(), event.getY());
 			Plate plate = selectTouchablePlate(event.getX(), event.getY());
 			if (plate != null)
 				RemoveFoodFromPlate(plate);
 
 		case MotionEvent.ACTION_MOVE:
-			Log.d("ONTOUCH", "ACTION_MOVE");
+			// Log.d("ONTOUCH", "ACTION_MOVE");
 			if (actualFood != null) {
 				actualFood.setX(event.getX());
 				actualFood.setY(event.getY());
@@ -180,7 +191,7 @@ public class KosherGame {
 			break;
 
 		case MotionEvent.ACTION_UP:
-			Log.d("ONTOUCH", "ACTION_UP");
+			// Log.d("ONTOUCH", "ACTION_UP");
 			if (actualFood != null) {
 				actualPlate = selectPlate();
 				if (actualPlate != null)
@@ -242,13 +253,22 @@ public class KosherGame {
 				}
 			}
 	}
-	
-	public KosherSurfaceActivity getKosherSurfaceActivity()
-	{
+
+	public KosherSurfaceActivity getKosherSurfaceActivity() {
 		return kosherSurfaceActivity;
 	}
-	
 
+	public KosherSurface getKosherSurface() {
+		return kosherSurface;
+	}
+
+	public List<Food> getFoods() {
+		return foods;
+	}
+	
+	public List<Plate> getPlates() {
+		return plates;
+	}
 	public void doDraw(Canvas canvas) {
 		if (canvas == null)
 			return;
@@ -289,6 +309,9 @@ public class KosherGame {
 					plate.freeResources();
 				}
 			}
+
+		if (scheduledExec != null)
+			scheduledExec.shutdownNow();
 
 		background.recycle();
 	}

@@ -36,7 +36,13 @@ public class FoodsDataSource implements DataSourceInterface {
 		values.put(KosherDbHelper.COLUMN_NAME, food.getName());
 		values.put(KosherDbHelper.COLUMN_IS_KOSHER, food.getIs_kosher());
 		values.put(KosherDbHelper.COLUMN_INFORMATION, food.getInformation());
-		database.insert(KosherDbHelper.FOODS_TABLE, null, values);
+		try {
+			database.beginTransaction();
+			database.insert(KosherDbHelper.FOODS_TABLE, null, values);
+			database.setTransactionSuccessful();
+		} finally {
+			database.endTransaction();
+		}
 		return food;
 
 	}
@@ -67,7 +73,12 @@ public class FoodsDataSource implements DataSourceInterface {
 	}
 
 	public void truncateFoods() {
-		database.rawQuery("delete from " + KosherDbHelper.FOODS_TABLE + ";",
-				null);
+		try {
+			database.beginTransaction();
+			database.execSQL("delete from " + KosherDbHelper.FOODS_TABLE + ";");
+			database.setTransactionSuccessful();
+		} finally {
+			database.endTransaction();
+		}
 	}
 }

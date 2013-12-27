@@ -10,7 +10,7 @@ import android.view.View;
 import android.view.View.OnTouchListener;
 
 public class KosherSurface extends SurfaceView implements
-		SurfaceHolder.Callback, OnTouchListener{
+		SurfaceHolder.Callback, OnTouchListener {
 
 	private KosherGame kosherGame;
 	private GameThread gameThread;
@@ -37,9 +37,8 @@ public class KosherSurface extends SurfaceView implements
 		kosherGame = new KosherGame(this, kosherSurfaceActivity);
 		gameThread = new GameThread(holder, kosherGame);
 	}
-	
-	public void startThread()
-	{
+
+	public void startThread() {
 		gameThread.start();
 	}
 
@@ -47,9 +46,7 @@ public class KosherSurface extends SurfaceView implements
 	@Override
 	public void surfaceDestroyed(SurfaceHolder holder) {
 		boolean retry = true;
-		
-		kosherGame.freeResources();
-		
+
 		gameThread.stopRunning();
 		while (retry) {
 			try {
@@ -57,6 +54,8 @@ public class KosherSurface extends SurfaceView implements
 				retry = false;
 			} catch (InterruptedException e) {
 
+			} finally {
+				kosherGame.freeResources();
 			}
 		}
 	}

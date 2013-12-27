@@ -46,7 +46,7 @@ public class FoodTest extends AndroidTestCase {
 		super.setUp();
 	}
 
-	protected void testPreconditions() {
+	protected void testPreconditions() throws Exception {
 		assertEquals(
 				"ID does not match with the ID was set in setUp() function.",
 				TEST_FOOD_ID, foodUnderTest.getId());
@@ -133,10 +133,8 @@ public class FoodTest extends AndroidTestCase {
 
 	@Override
 	protected void tearDown() throws Exception {
+		assertNotNull("Object is null dispite we initialized it before.", foodUnderTest);
 		foodUnderTest.freeResources();
-		assertNull(
-				"The object does not freed the picture resource. Memory leak!",
-				foodUnderTest.getPiture());
 		super.tearDown();
 	}
 

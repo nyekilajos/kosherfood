@@ -54,13 +54,15 @@ public class NotKosherPairsDataSource implements DataSourceInterface {
 						+ notKosherPairs.getFood_second_id(), null);
 	}
 
-	/** This function executes a query that look up for appropriate records
-	 * in the given order and in the reverse order as well.
+	/**
+	 * This function executes a query that look up for appropriate records in
+	 * the given order and in the reverse order as well.
+	 * 
 	 * @param food_first_id
 	 * @param food_second_id
 	 * @return
 	 */
-	
+
 	public NotKosherPairs getNotKosherPairs(int food_first_id,
 			int food_second_id) {
 		Cursor cursor = database.query(KosherDbHelper.NOT_KOSHER_PAIRS_TABLE,
@@ -97,7 +99,13 @@ public class NotKosherPairsDataSource implements DataSourceInterface {
 	}
 
 	public void truncateNotKosherPairs() {
-		database.rawQuery("delete from "
-				+ KosherDbHelper.NOT_KOSHER_PAIRS_TABLE + ";", null);
+		try {
+			database.beginTransaction();
+			database.execSQL("delete from "
+					+ KosherDbHelper.NOT_KOSHER_PAIRS_TABLE + ";");
+			database.setTransactionSuccessful();
+		} finally {
+			database.endTransaction();
+		}
 	}
 }
