@@ -5,6 +5,8 @@ import android.util.Log;
 public class ScheduledTasks implements Runnable {
 
 	private int actionType;
+	private Boolean isIdle;
+
 	private KosherGame kosherGame;
 	private Plate plate;
 
@@ -23,62 +25,119 @@ public class ScheduledTasks implements Runnable {
 	 * @param _kosherGame
 	 */
 	public ScheduledTasks(int _actionType, KosherGame _kosherGame) {
+		isIdle = false;
 		actionType = _actionType;
 		kosherGame = _kosherGame;
 		phase = 0;
 	}
 
 	public ScheduledTasks(int _actionType, Plate _plate) {
-		actionType = _actionType;
-		plate = _plate;
+			isIdle = false;
+			actionType = _actionType;
+			plate = _plate;
+	}
+
+	public void NewPlateAction(Plate _plate) {
+			isIdle = false;
+			actionType = ACTION_NEW_PLATE;
+			phase = 0;
+			plate = _plate;
+	}
+
+	public boolean IsIdle() {
+		return isIdle;
 	}
 
 	@Override
 	public void run() {
-		switch (actionType) {
+		synchronized (isIdle) {
+			switch (actionType) {
 
-		case ACTION_INIT_PLATES:
-			// TODO: add code
-			Log.d("TICK", "TACK");
-			switch (phase) {
-			case 0:
-				plate = kosherGame.getPlates().get(0);
-				if (plate.getX() < plate.getWidth() / 2)
-					plate.setX(plate.getX() + 1);
-				else
-					phase++;
+			case ACTION_INIT_PLATES:
+				switch (phase) {
+				case 0:
+					plate = kosherGame.getPlates().get(0);
+					if (plate.getX() < plate.getWidth() / 2)
+						plate.setX(plate.getX() + 1);
+					else
+						phase++;
+					break;
+				case 1:
+					plate = kosherGame.getPlates().get(1);
+					if (plate.getY() < plate.getHeight() / 2)
+						plate.setY(plate.getY() + 1);
+					else
+						phase++;
+					break;
+				case 2:
+					plate = kosherGame.getPlates().get(2);
+					if (plate.getX() > kosherGame.getKosherSurface().getWidth()
+							- plate.getWidth() / 2)
+						plate.setX(plate.getX() - 1);
+					else
+						phase++;
+					break;
+				case 3:
+					plate = kosherGame.getPlates().get(3);
+					if (plate.getY() > kosherGame.getKosherSurface()
+							.getHeight() - plate.getHeight() / 2)
+						plate.setY(plate.getY() - 1);
+					else {
+						phase = 0;
+						actionType = ACTION_IDLE;
+						isIdle = true;
+					}
+					break;
+				}
 				break;
-			case 1:
-				plate = kosherGame.getPlates().get(1);
-				if (plate.getY() < plate.getHeight() / 2)
-					plate.setY(plate.getY() + 1);
-				else
-					phase++;
-				break;
-			case 2:
-				plate = kosherGame.getPlates().get(2);
-				if (plate.getX() > kosherGame.getKosherSurface().getWidth()
-						- plate.getWidth() / 2)
-					plate.setX(plate.getX() - 1);
-				else
-					phase++;
-				break;
-			case 3:
-				plate = kosherGame.getPlates().get(3);
-				if (plate.getY() > kosherGame.getKosherSurface().getHeight()
-						- plate.getHeight() / 2)
-					plate.setY(plate.getY() - 1);
-				else {
-					phase = 0;
-					actionType = ACTION_IDLE;
+
+			case ACTION_NEW_PLATE:
+				switch (plate.getId()) {
+				case 11:
+					if (plate.getX() < plate.getWidth() / 2) {
+						plate.setX(plate.getX() + 1);
+						Log.d("NEWPLATE", "11 moving");
+					} else {
+						actionType = ACTION_IDLE;
+						isIdle = true;
+						Log.d("NEWPLATE", "11 finished");
+					}
+					break;
+				case 12:
+					if (plate.getY() < plate.getHeight() / 2) {
+						plate.setY(plate.getY() + 1);
+						Log.d("NEWPLATE", "12 moving");
+					} else {
+						actionType = ACTION_IDLE;
+						isIdle = true;
+						Log.d("NEWPLATE", "12 finished");
+					}
+					break;
+				case 13:
+					if (plate.getX() > kosherGame.getKosherSurface().getWidth()
+							- plate.getWidth() / 2) {
+						plate.setX(plate.getX() - 1);
+						Log.d("NEWPLATE", "13 moving");
+					} else {
+						actionType = ACTION_IDLE;
+						isIdle = true;
+						Log.d("NEWPLATE", "13 finished");
+					}
+					break;
+				case 14:
+					if (plate.getY() > kosherGame.getKosherSurface()
+							.getHeight() - plate.getHeight() / 2) {
+						plate.setY(plate.getY() - 1);
+						Log.d("NEWPLATE", "14 moving");
+					} else {
+						actionType = ACTION_IDLE;
+						isIdle = true;
+						Log.d("NEWPLATE", "14 finished");
+					}
+					break;
 				}
 				break;
 			}
-			break;
-
-		case ACTION_NEW_PLATE:
-			// TODO: add code
-			break;
 		}
 
 	}

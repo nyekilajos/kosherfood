@@ -21,11 +21,13 @@ public class Plate extends Drawable {
 
 	private KosherDbObj kosherDbObj;
 
-	public Plate(int _id, float init_x, float init_y, Bitmap _picture,
+	public Plate(int _id, float _init_x, float _init_y, Bitmap _picture,
 			float _width, float _height, KosherGame _kosherGame) {
 		id = _id;
-		x = init_x;
-		y = init_y;
+		init_x = _init_x;
+		init_y = _init_y;
+		x = _init_x;
+		y = _init_y;
 		width = _width;
 		height = _height;
 		picture = _picture;

@@ -17,6 +17,9 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.media.AudioManager;
+import android.media.SoundPool;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -26,9 +29,13 @@ public class KosherGame {
 	private KosherSurfaceActivity kosherSurfaceActivity;
 	private List<Food> foods;
 	private List<Plate> plates;
+	private List<Integer> soundIDs;
+
+	private SoundPool soundPool;
 
 	private ScheduledExecutorService scheduledExec;
-	private ScheduledTasks scheduledTasks;
+	private List<ScheduledTasks> scheduledTasks;
+	private static long PERIODIC_DELAY = 20;
 
 	private Bitmap background = null;
 
@@ -41,6 +48,8 @@ public class KosherGame {
 		kosherSurfaceActivity = _kosherSurfaceActivity;
 		foods = new ArrayList<Food>();
 		plates = new ArrayList<Plate>();
+		soundIDs = new ArrayList<Integer>();
+		scheduledTasks = new ArrayList<ScheduledTasks>();
 
 		new InitGameAsync(this).execute();
 
@@ -48,6 +57,7 @@ public class KosherGame {
 
 	public void initGame() {
 		initDrawableObjects();
+		initSounds();
 		initDatabase();
 	}
 
@@ -104,12 +114,25 @@ public class KosherGame {
 					platePicture, 180, 160, this));
 			plates.add(new Plate(12, kosherSurface.getWidth() / 2, -80,
 					platePicture, 180, 160, this));
-			plates.add(new Plate(13, kosherSurface.getWidth() + 90, kosherSurface
-					.getHeight() / 2, platePicture, 180, 160, this));
+			plates.add(new Plate(13, kosherSurface.getWidth() + 90,
+					kosherSurface.getHeight() / 2, platePicture, 180, 160, this));
 			plates.add(new Plate(14, kosherSurface.getWidth() / 2,
-					kosherSurface.getHeight() + 80, platePicture, 180, 160, this));
+					kosherSurface.getHeight() + 80, platePicture, 180, 160,
+					this));
 		}
 
+	}
+
+	private void initSounds() {
+		soundPool = new SoundPool(4, AudioManager.STREAM_MUSIC, 0);
+		soundIDs.add(soundPool.load(kosherSurfaceActivity,
+				hu.bme.aut.amorg.nyekilajos.kosherfood.R.raw.newplate, 0));
+		soundIDs.add(soundPool.load(kosherSurfaceActivity,
+				hu.bme.aut.amorg.nyekilajos.kosherfood.R.raw.s01, 0));
+		soundIDs.add(soundPool.load(kosherSurfaceActivity,
+				hu.bme.aut.amorg.nyekilajos.kosherfood.R.raw.s02, 0));
+		soundIDs.add(soundPool.load(kosherSurfaceActivity,
+				hu.bme.aut.amorg.nyekilajos.kosherfood.R.raw.s03, 0));
 	}
 
 	private void initDatabase() {
@@ -166,11 +189,11 @@ public class KosherGame {
 
 	public void startGame() {
 		kosherSurface.startThread();
-		scheduledExec = Executors.newScheduledThreadPool(1);
-		scheduledTasks = new ScheduledTasks(ScheduledTasks.ACTION_INIT_PLATES,
-				this);
-		scheduledExec.scheduleWithFixedDelay(scheduledTasks, 0, 40,
-				TimeUnit.MILLISECONDS);
+		scheduledExec = Executors.newScheduledThreadPool(4);
+		scheduledTasks.add(new ScheduledTasks(
+				ScheduledTasks.ACTION_INIT_PLATES, this));
+		scheduledExec.scheduleWithFixedDelay(scheduledTasks.get(0), 0,
+				PERIODIC_DELAY, TimeUnit.MILLISECONDS);
 	}
 
 	public void onTouch(View v, MotionEvent event) {
@@ -237,6 +260,7 @@ public class KosherGame {
 
 	private void PutFoodToPlate() {
 		actualPlate.addFoodToPlate(actualFood);
+		soundPool.play(soundIDs.get(actualFood.getId()), 1, 1, 0, 0, 1);
 		synchronized (foods) {
 			foods.remove(actualFood);
 		}
@@ -252,6 +276,29 @@ public class KosherGame {
 					foods.add(food);
 				}
 			}
+		soundPool.play(soundIDs.get(0), 1, 1, 0, 0, 1);
+		plate.initCoordinates();
+		synchronized (scheduledTasks) {
+
+			boolean foundIdleThread = false;
+			for (ScheduledTasks scheduled : scheduledTasks) {
+				if (scheduled.IsIdle() && foundIdleThread == false) {
+					Log.d("SCHEDULED", "IDLE");
+					scheduled.NewPlateAction(plate);
+					foundIdleThread = true;
+					break;
+				}
+				Log.d("SCHEDULED", "NOT_IDLE");
+			}
+			if (foundIdleThread == false) {
+				ScheduledTasks tempSch = new ScheduledTasks(
+						ScheduledTasks.ACTION_NEW_PLATE, plate);
+				scheduledTasks.add(tempSch);
+				scheduledExec.scheduleWithFixedDelay(tempSch, 0,
+						PERIODIC_DELAY, TimeUnit.MILLISECONDS);
+				Log.d("SCHEDULED", "NEW");
+			}
+		}
 	}
 
 	public KosherSurfaceActivity getKosherSurfaceActivity() {
@@ -265,10 +312,11 @@ public class KosherGame {
 	public List<Food> getFoods() {
 		return foods;
 	}
-	
+
 	public List<Plate> getPlates() {
 		return plates;
 	}
+
 	public void doDraw(Canvas canvas) {
 		if (canvas == null)
 			return;
@@ -309,6 +357,9 @@ public class KosherGame {
 					plate.freeResources();
 				}
 			}
+
+		if (soundPool != null)
+			soundPool.release();
 
 		if (scheduledExec != null)
 			scheduledExec.shutdownNow();
