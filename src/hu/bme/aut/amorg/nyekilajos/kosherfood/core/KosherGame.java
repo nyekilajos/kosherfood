@@ -192,8 +192,17 @@ public class KosherGame {
 		scheduledExec = Executors.newScheduledThreadPool(4);
 		scheduledTasks.add(new ScheduledTasks(
 				ScheduledTasks.ACTION_INIT_PLATES, this));
-		scheduledExec.scheduleWithFixedDelay(scheduledTasks.get(0), 0,
-				PERIODIC_DELAY, TimeUnit.MILLISECONDS);
+		scheduledTasks
+				.add(new ScheduledTasks(ScheduledTasks.ACTION_IDLE, this));
+		scheduledTasks
+				.add(new ScheduledTasks(ScheduledTasks.ACTION_IDLE, this));
+		scheduledTasks
+				.add(new ScheduledTasks(ScheduledTasks.ACTION_IDLE, this));
+		for (ScheduledTasks scheduled : scheduledTasks) {
+			scheduledExec.scheduleWithFixedDelay(scheduled, 0, PERIODIC_DELAY,
+					TimeUnit.MILLISECONDS);
+		}
+
 	}
 
 	public void onTouch(View v, MotionEvent event) {
@@ -278,27 +287,26 @@ public class KosherGame {
 			}
 		soundPool.play(soundIDs.get(0), 1, 1, 0, 0, 1);
 		plate.initCoordinates();
-		synchronized (scheduledTasks) {
 
-			boolean foundIdleThread = false;
-			for (ScheduledTasks scheduled : scheduledTasks) {
-				if (scheduled.IsIdle() && foundIdleThread == false) {
-					Log.d("SCHEDULED", "IDLE");
-					scheduled.NewPlateAction(plate);
-					foundIdleThread = true;
-					break;
-				}
-				Log.d("SCHEDULED", "NOT_IDLE");
+		boolean foundIdleThread = false;
+		for (ScheduledTasks scheduled : scheduledTasks) {
+			if (scheduled.IsIdle() && foundIdleThread == false) {
+				Log.d("SCHEDULED", "IDLE");
+				scheduled.NewPlateAction(plate);
+				foundIdleThread = true;
+				break;
 			}
-			if (foundIdleThread == false) {
-				ScheduledTasks tempSch = new ScheduledTasks(
-						ScheduledTasks.ACTION_NEW_PLATE, plate);
-				scheduledTasks.add(tempSch);
-				scheduledExec.scheduleWithFixedDelay(tempSch, 0,
-						PERIODIC_DELAY, TimeUnit.MILLISECONDS);
-				Log.d("SCHEDULED", "NEW");
-			}
+			Log.d("SCHEDULED", "NOT_IDLE");
 		}
+		if (foundIdleThread == false) {
+			ScheduledTasks tempSch = new ScheduledTasks(
+					ScheduledTasks.ACTION_NEW_PLATE, plate);
+			scheduledTasks.add(tempSch);
+			scheduledExec.scheduleWithFixedDelay(tempSch, 0, PERIODIC_DELAY,
+					TimeUnit.MILLISECONDS);
+			Log.d("SCHEDULED", "NEW");
+		}
+
 	}
 
 	public KosherSurfaceActivity getKosherSurfaceActivity() {
