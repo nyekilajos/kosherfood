@@ -10,8 +10,10 @@ import java.util.List;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Paint;
 import android.graphics.Paint.Align;
+import android.text.Layout;
+import android.text.StaticLayout;
+import android.text.TextPaint;
 
 public class Plate extends Drawable {
 
@@ -122,16 +124,28 @@ public class Plate extends Drawable {
 	@Override
 	public void doDraw(Canvas canvas) {
 		super.doDraw(canvas);
-		Paint paint = new Paint();
-		if(kosherDbObj.isKosher)
-			paint.setARGB(255,0,255,0);
+
+		TextPaint paint = new TextPaint();
+		if (kosherDbObj.isKosher)
+			paint.setARGB(255, 0, 255, 0);
 		else
 			paint.setARGB(255, 255, 0, 0);
-		paint.setTextAlign(Align.CENTER);
+
+		//paint.setTextAlign(Align.CENTER);
 		paint.setTextScaleX((float) 0.8);
 		paint.setFakeBoldText(true);
 		paint.setTextSize(11);
-		canvas.drawText(kosherDbObj.information, x, y, paint);
+
+		if (this.getX() >= 0 && this.getY() >= 0) {
+			StaticLayout staticLayout = new StaticLayout(
+					kosherDbObj.information, paint, (int) this.getWidth(),
+					Layout.Alignment.ALIGN_CENTER, 1, 1, false);
+
+			canvas.save();
+			canvas.translate(this.getRectF().left, this.getRectF().top);
+			staticLayout.draw(canvas);
+			canvas.restore();
+		}
 	}
 
 }

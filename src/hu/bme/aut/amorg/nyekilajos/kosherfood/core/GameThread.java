@@ -25,6 +25,7 @@ public class GameThread extends Thread {
 				synchronized (this.holder) {
 					kosherGame.doDraw(canvas);
 				}
+
 			} finally {
 
 				if (canvas != null) {
