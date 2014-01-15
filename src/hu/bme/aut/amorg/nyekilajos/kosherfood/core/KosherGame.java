@@ -15,6 +15,7 @@ import java.util.concurrent.TimeUnit;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Matrix;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.media.AudioManager;
@@ -67,32 +68,30 @@ public class KosherGame {
 		opts.inPurgeable = true;
 		opts.inTempStorage = new byte[32 * 1024];
 
-		background = BitmapFactory
-				.decodeResource(
-						kosherSurface.getResources(),
-						hu.bme.aut.amorg.nyekilajos.kosherfood.R.drawable.background_pngpng,
-						opts);
+		background = BitmapFactory.decodeResource(kosherSurface.getResources(),
+				hu.bme.aut.amorg.nyekilajos.kosherfood.R.drawable.background,
+				opts);
 
 		synchronized (foods) {
 			foods.add(new Food(
 					1,
 					"pig",
 					300,
-					300,
+					200,
 					BitmapFactory.decodeResource(
 							kosherSurface.getResources(),
 							hu.bme.aut.amorg.nyekilajos.kosherfood.R.drawable.pig,
-							opts), 50, 50));
+							opts), 100, 100));
 
 			foods.add(new Food(
 					2,
 					"carrot",
-					300,
+					400,
 					200,
 					BitmapFactory.decodeResource(
 							kosherSurface.getResources(),
-							hu.bme.aut.amorg.nyekilajos.kosherfood.R.drawable.carrot,
-							opts), 50, 50));
+							hu.bme.aut.amorg.nyekilajos.kosherfood.R.drawable.bug,
+							opts), 100, 100));
 
 			foods.add(new Food(
 					3,
@@ -102,20 +101,82 @@ public class KosherGame {
 					BitmapFactory.decodeResource(
 							kosherSurface.getResources(),
 							hu.bme.aut.amorg.nyekilajos.kosherfood.R.drawable.milk,
-							opts), 50, 50));
+							opts), 100, 100));
+
+			foods.add(new Food(
+					4,
+					"chicken",
+					600,
+					200,
+					BitmapFactory.decodeResource(
+							kosherSurface.getResources(),
+							hu.bme.aut.amorg.nyekilajos.kosherfood.R.drawable.chicken,
+							opts), 100, 100));
+
+			foods.add(new Food(
+					5,
+					"egg",
+					300,
+					300,
+					BitmapFactory.decodeResource(
+							kosherSurface.getResources(),
+							hu.bme.aut.amorg.nyekilajos.kosherfood.R.drawable.egg,
+							opts), 100, 100));
+
+			foods.add(new Food(
+					6,
+					"fish",
+					400,
+					300,
+					BitmapFactory.decodeResource(
+							kosherSurface.getResources(),
+							hu.bme.aut.amorg.nyekilajos.kosherfood.R.drawable.fish,
+							opts), 100, 100));
+
+			foods.add(new Food(
+					7,
+					"goose",
+					500,
+					300,
+					BitmapFactory.decodeResource(
+							kosherSurface.getResources(),
+							hu.bme.aut.amorg.nyekilajos.kosherfood.R.drawable.goose,
+							opts), 100, 100));
 		}
 
 		Bitmap platePicture = BitmapFactory.decodeResource(
 				kosherSurface.getResources(),
 				hu.bme.aut.amorg.nyekilajos.kosherfood.R.drawable.plate, opts);
 
+		Matrix matrix = new Matrix();
+		matrix.postRotate(90);
+		
 		synchronized (plates) {
-			plates.add(new Plate(11, -90, kosherSurface.getHeight() / 2,
-					platePicture, 180, 160, this));
+			
+			Bitmap rotatedBitmap = Bitmap.createBitmap(platePicture, 0, 0,
+					platePicture.getWidth(), platePicture.getHeight(), matrix,
+					true);
+			plates.add(new Plate(11, -80, kosherSurface.getHeight() / 2,
+					rotatedBitmap, 160, 180, this));
+
+			matrix.postRotate(90);
+			rotatedBitmap = Bitmap.createBitmap(platePicture, 0, 0,
+					platePicture.getWidth(), platePicture.getHeight(), matrix,
+					true);
 			plates.add(new Plate(12, kosherSurface.getWidth() / 2, -80,
-					platePicture, 180, 160, this));
-			plates.add(new Plate(13, kosherSurface.getWidth() + 90,
-					kosherSurface.getHeight() / 2, platePicture, 180, 160, this));
+					rotatedBitmap, 180, 160, this));
+
+			matrix.postRotate(90);
+			rotatedBitmap = Bitmap.createBitmap(platePicture, 0, 0,
+					platePicture.getWidth(), platePicture.getHeight(), matrix,
+					true);
+			plates.add(new Plate(13, kosherSurface.getWidth() + 80,
+					kosherSurface.getHeight() / 2, rotatedBitmap, 160, 180, this));
+
+			matrix.postRotate(90);
+			rotatedBitmap = Bitmap.createBitmap(platePicture, 0, 0,
+					platePicture.getWidth(), platePicture.getHeight(), matrix,
+					true);
 			plates.add(new Plate(14, kosherSurface.getWidth() / 2,
 					kosherSurface.getHeight() + 80, platePicture, 180, 160,
 					this));
@@ -150,15 +211,39 @@ public class KosherGame {
 		foodsDataSource.insert(food);
 
 		food.set_id(2);
-		food.setName("carrot");
-		food.setIs_kosher(1);
-		food.setInformation("Jews can eat carrots!");
+		food.setName("bug");
+		food.setIs_kosher(0);
+		food.setInformation("Jews must not eat bug!");
 		foodsDataSource.insert(food);
 
 		food.set_id(3);
 		food.setName("milk");
 		food.setIs_kosher(1);
 		food.setInformation("Jews can drink milk!");
+		foodsDataSource.insert(food);
+
+		food.set_id(4);
+		food.setName("chicken");
+		food.setIs_kosher(1);
+		food.setInformation("Jews can eat chicken!");
+		foodsDataSource.insert(food);
+
+		food.set_id(5);
+		food.setName("egg");
+		food.setIs_kosher(1);
+		food.setInformation("Jews can eat egg!");
+		foodsDataSource.insert(food);
+
+		food.set_id(6);
+		food.setName("fish");
+		food.setIs_kosher(1);
+		food.setInformation("Jews can eat fish!");
+		foodsDataSource.insert(food);
+
+		food.set_id(7);
+		food.setName("goose");
+		food.setIs_kosher(0);
+		food.setInformation("Jews must not eat goose!");
 		foodsDataSource.insert(food);
 
 		foodsDataSource.close();
@@ -170,10 +255,22 @@ public class KosherGame {
 
 		NotKosherPairs notKosherPairs = new NotKosherPairs();
 
-		notKosherPairs.setFood_first_id(2);
-		notKosherPairs.setFood_second_id(3);
+		notKosherPairs.setFood_first_id(3);
+		notKosherPairs.setFood_second_id(4);
 		notKosherPairs
-				.setInformation("Jews must not eat carrot and drink milk together!");
+				.setInformation("Jews must not eat chicken and drink milk together!");
+		notKosherPairsDataSource.insert(notKosherPairs);
+
+		notKosherPairs.setFood_first_id(3);
+		notKosherPairs.setFood_second_id(5);
+		notKosherPairs
+				.setInformation("Jews must not eat egg and drink milk together!");
+		notKosherPairsDataSource.insert(notKosherPairs);
+
+		notKosherPairs.setFood_first_id(3);
+		notKosherPairs.setFood_second_id(6);
+		notKosherPairs
+				.setInformation("Jews must not eat fish and drink milk together!");
 		notKosherPairsDataSource.insert(notKosherPairs);
 
 		notKosherPairsDataSource.close();
@@ -269,7 +366,8 @@ public class KosherGame {
 
 	private void PutFoodToPlate() {
 		actualPlate.addFoodToPlate(actualFood);
-		soundPool.play(soundIDs.get(actualFood.getId()), 1, 1, 0, 0, 1);
+		if (actualFood.getId() < soundIDs.size())
+			soundPool.play(soundIDs.get(actualFood.getId()), 1, 1, 0, 0, 1);
 		synchronized (foods) {
 			foods.remove(actualFood);
 		}
@@ -277,6 +375,32 @@ public class KosherGame {
 	}
 
 	private void RemoveFoodFromPlate(Plate plate) {
+
+		if (!plate.isKosher()) {
+
+			soundPool.play(soundIDs.get(0), 1, 1, 0, 0, 1);
+			plate.initCoordinates();
+
+			boolean foundIdleThread = false;
+			for (ScheduledTasks scheduled : scheduledTasks) {
+				if (scheduled.IsIdle() && foundIdleThread == false) {
+					Log.d("SCHEDULED", "IDLE");
+					scheduled.NewPlateAction(plate);
+					foundIdleThread = true;
+					break;
+				}
+				Log.d("SCHEDULED", "NOT_IDLE");
+			}
+			if (foundIdleThread == false) {
+				ScheduledTasks tempSch = new ScheduledTasks(
+						ScheduledTasks.ACTION_NEW_PLATE, plate);
+				scheduledTasks.add(tempSch);
+				scheduledExec.scheduleWithFixedDelay(tempSch, 0,
+						PERIODIC_DELAY, TimeUnit.MILLISECONDS);
+				Log.d("SCHEDULED", "NEW");
+			}
+		}
+
 		List<Food> removed = plate.removeFoodsFromPlate();
 		if (!removed.isEmpty() && removed != null)
 			synchronized (foods) {
@@ -285,27 +409,6 @@ public class KosherGame {
 					foods.add(food);
 				}
 			}
-		soundPool.play(soundIDs.get(0), 1, 1, 0, 0, 1);
-		plate.initCoordinates();
-
-		boolean foundIdleThread = false;
-		for (ScheduledTasks scheduled : scheduledTasks) {
-			if (scheduled.IsIdle() && foundIdleThread == false) {
-				Log.d("SCHEDULED", "IDLE");
-				scheduled.NewPlateAction(plate);
-				foundIdleThread = true;
-				break;
-			}
-			Log.d("SCHEDULED", "NOT_IDLE");
-		}
-		if (foundIdleThread == false) {
-			ScheduledTasks tempSch = new ScheduledTasks(
-					ScheduledTasks.ACTION_NEW_PLATE, plate);
-			scheduledTasks.add(tempSch);
-			scheduledExec.scheduleWithFixedDelay(tempSch, 0, PERIODIC_DELAY,
-					TimeUnit.MILLISECONDS);
-			Log.d("SCHEDULED", "NEW");
-		}
 
 	}
 

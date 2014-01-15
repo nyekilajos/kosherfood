@@ -10,7 +10,6 @@ import java.util.List;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Paint.Align;
 import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
@@ -131,7 +130,7 @@ public class Plate extends Drawable {
 		else
 			paint.setARGB(255, 255, 0, 0);
 
-		//paint.setTextAlign(Align.CENTER);
+		// paint.setTextAlign(Align.CENTER);
 		paint.setTextScaleX((float) 0.8);
 		paint.setFakeBoldText(true);
 		paint.setTextSize(11);
@@ -142,10 +141,15 @@ public class Plate extends Drawable {
 					Layout.Alignment.ALIGN_CENTER, 1, 1, false);
 
 			canvas.save();
-			canvas.translate(this.getRectF().left, this.getRectF().top);
+			canvas.translate((float) (this.getRectF().left),
+					(float) (this.getRectF().top));
 			staticLayout.draw(canvas);
 			canvas.restore();
 		}
+	}
+
+	public boolean isKosher() {
+		return kosherDbObj.isKosher;
 	}
 
 }
