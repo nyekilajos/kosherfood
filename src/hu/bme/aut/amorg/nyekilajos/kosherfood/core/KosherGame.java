@@ -36,7 +36,7 @@ public class KosherGame {
 
 	private ScheduledExecutorService scheduledExec;
 	private List<ScheduledTasks> scheduledTasks;
-	private static long PERIODIC_DELAY = 20;
+	private static long PERIODIC_DELAY = 25;
 
 	private Bitmap background = null;
 
@@ -157,28 +157,28 @@ public class KosherGame {
 					platePicture.getWidth(), platePicture.getHeight(), matrix,
 					true);
 			plates.add(new Plate(11, -80, kosherSurface.getHeight() / 2,
-					rotatedBitmap, 160, 180, this));
+					rotatedBitmap, 160, 240, this));
 
 			matrix.postRotate(90);
 			rotatedBitmap = Bitmap.createBitmap(platePicture, 0, 0,
 					platePicture.getWidth(), platePicture.getHeight(), matrix,
 					true);
 			plates.add(new Plate(12, kosherSurface.getWidth() / 2, -80,
-					rotatedBitmap, 180, 160, this));
+					rotatedBitmap, 240, 160, this));
 
 			matrix.postRotate(90);
 			rotatedBitmap = Bitmap.createBitmap(platePicture, 0, 0,
 					platePicture.getWidth(), platePicture.getHeight(), matrix,
 					true);
 			plates.add(new Plate(13, kosherSurface.getWidth() + 80,
-					kosherSurface.getHeight() / 2, rotatedBitmap, 160, 180, this));
+					kosherSurface.getHeight() / 2, rotatedBitmap, 160, 240, this));
 
 			matrix.postRotate(90);
 			rotatedBitmap = Bitmap.createBitmap(platePicture, 0, 0,
 					platePicture.getWidth(), platePicture.getHeight(), matrix,
 					true);
 			plates.add(new Plate(14, kosherSurface.getWidth() / 2,
-					kosherSurface.getHeight() + 80, platePicture, 180, 160,
+					kosherSurface.getHeight() + 80, platePicture, 240, 160,
 					this));
 		}
 

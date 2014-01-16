@@ -58,14 +58,14 @@ public class ScheduledTasks implements Runnable {
 			case 0:
 				plate = kosherGame.getPlates().get(0);
 				if (plate.getX() < plate.getWidth() / 2)
-					plate.setX(plate.getX() + 1);
+					plate.setX(plate.getX() + 4);
 				else
 					phase++;
 				break;
 			case 1:
 				plate = kosherGame.getPlates().get(1);
 				if (plate.getY() < plate.getHeight() / 2)
-					plate.setY(plate.getY() + 1);
+					plate.setY(plate.getY() + 4);
 				else
 					phase++;
 				break;
@@ -73,7 +73,7 @@ public class ScheduledTasks implements Runnable {
 				plate = kosherGame.getPlates().get(2);
 				if (plate.getX() > kosherGame.getKosherSurface().getWidth()
 						- plate.getWidth() / 2)
-					plate.setX(plate.getX() - 1);
+					plate.setX(plate.getX() - 4);
 				else
 					phase++;
 				break;
@@ -81,7 +81,7 @@ public class ScheduledTasks implements Runnable {
 				plate = kosherGame.getPlates().get(3);
 				if (plate.getY() > kosherGame.getKosherSurface().getHeight()
 						- plate.getHeight() / 2)
-					plate.setY(plate.getY() - 1);
+					plate.setY(plate.getY() - 4);
 				else {
 					phase = 0;
 					actionType = ACTION_IDLE;

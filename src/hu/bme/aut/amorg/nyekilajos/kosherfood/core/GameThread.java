@@ -24,8 +24,12 @@ public class GameThread extends Thread {
 				canvas = this.holder.lockCanvas(null);
 				synchronized (this.holder) {
 					kosherGame.doDraw(canvas);
+					Thread.sleep(10);
 				}
 
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			} finally {
 
 				if (canvas != null) {

@@ -10,6 +10,7 @@ import java.util.List;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.RectF;
 import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
@@ -120,6 +121,11 @@ public class Plate extends Drawable {
 		return removed;
 	}
 
+	public RectF getInnerRectF() {
+		return new RectF((float) (x - width * 0.3), (float) (y - height * 0.08),
+				(float) (x + width * 0.1), (float) (y + height * 0.2));
+	}
+
 	@Override
 	public void doDraw(Canvas canvas) {
 		super.doDraw(canvas);
@@ -137,12 +143,30 @@ public class Plate extends Drawable {
 
 		if (this.getX() >= 0 && this.getY() >= 0) {
 			StaticLayout staticLayout = new StaticLayout(
-					kosherDbObj.information, paint, (int) this.getWidth(),
-					Layout.Alignment.ALIGN_CENTER, 1, 1, false);
+					kosherDbObj.information, paint, (int) this.getInnerRectF()
+							.width(), Layout.Alignment.ALIGN_CENTER, 1, 1,
+					false);
 
 			canvas.save();
-			canvas.translate((float) (this.getRectF().left),
-					(float) (this.getRectF().top));
+			switch (this.id) {
+			case 11:
+				canvas.rotate(90, this.x, this.y);
+				break;
+
+			case 12:
+				canvas.rotate(180, this.x, this.y);
+				break;
+
+			case 13:
+				canvas.rotate(270, this.x, this.y);
+				break;
+
+			case 14:
+				canvas.rotate(0, this.x, this.y);
+				break;
+			}
+			canvas.translate((float) (this.getInnerRectF().left),
+					(float) (this.getInnerRectF().top));
 			staticLayout.draw(canvas);
 			canvas.restore();
 		}
