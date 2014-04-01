@@ -1,68 +1,63 @@
 package hu.bme.aut.amorg.nyekilajos.kosherfood.core;
 
-import hu.bme.aut.amorg.nyekilajos.kosherfood.activities.KosherSurfaceActivity;
+import roboguice.RoboGuice;
 import android.content.Context;
-import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.View.OnTouchListener;
 
+import com.google.inject.Inject;
+
 public class KosherSurface extends SurfaceView implements
 		SurfaceHolder.Callback, OnTouchListener {
 
-	private KosherGame kosherGame;
-	private GameThread gameThread;
-	private KosherSurfaceActivity kosherSurfaceActivity;
+	@Inject
+	private KosherController kosherController;
+
+	@Inject
+	private InitGameAsync initGameAsync;
+
+	@Inject
+	private SurfaceSize surfaceSize;
 
 	private SurfaceHolder holder;
 
-	public KosherSurface(Context context, AttributeSet attrs, int defStyle) {
-		super(context, attrs, defStyle);
-		kosherSurfaceActivity = (KosherSurfaceActivity) context;
+	public KosherSurface(Context context) {
+		super(context);
+		Log.d("DI", "KosherSurface creation started...");
+		surfaceSize = RoboGuice.getInjector(context).getInstance(SurfaceSize.class);
+		kosherController = RoboGuice.getInjector(context).getInstance(KosherController.class);
+		initGameAsync = RoboGuice.getInjector(context).getInstance(InitGameAsync.class);
 		holder = getHolder();
 		holder.addCallback(this);
+		Log.d("DI", "KosherSurface created!");
 	}
 
 	@Override
 	public void surfaceChanged(SurfaceHolder holder, int format, int width,
 			int height) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void surfaceCreated(SurfaceHolder holder) {
-		kosherGame = new KosherGame(this, kosherSurfaceActivity);
-		gameThread = new GameThread(holder, kosherGame);
-	}
-
-	public void startThread() {
-		gameThread.start();
+		surfaceSize.setSurfaceWidth(this.getWidth());
+		surfaceSize.setSurfaceHeight(this.getHeight());
+		kosherController.startInit(holder);
+		initGameAsync.execute();
 	}
 
 	// TODO Is it working really?
 	@Override
 	public void surfaceDestroyed(SurfaceHolder holder) {
-		boolean retry = true;
-
-		gameThread.stopRunning();
-		while (retry) {
-			try {
-				gameThread.join();
-				retry = false;
-			} catch (InterruptedException e) {
-
-			} finally {
-				kosherGame.freeResources();
-			}
-		}
+		kosherController.destroyGame();
 	}
 
 	@Override
 	public boolean onTouch(View v, MotionEvent event) {
-		kosherGame.onTouch(v, event);
+		kosherController.onTouch(v, event);
 		return true;
 	}
 

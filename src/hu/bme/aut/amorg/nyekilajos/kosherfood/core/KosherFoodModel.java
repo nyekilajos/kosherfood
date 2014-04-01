@@ -8,10 +8,10 @@ import hu.bme.aut.amorg.nyekilajos.kosherfood.database.NotKosherPairsDataSource;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
+import roboguice.RoboGuice;
+import roboguice.inject.ContextSingleton;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -21,41 +21,47 @@ import android.graphics.RectF;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.util.Log;
-import android.view.MotionEvent;
-import android.view.View;
 
-public class KosherGame {
+import com.google.inject.Inject;
 
-	private KosherSurface kosherSurface;
-	private KosherSurfaceActivity kosherSurfaceActivity;
-	private List<Food> foods;
-	private List<Plate> plates;
-	private List<Integer> soundIDs;
+@ContextSingleton
+public class KosherFoodModel {
+
+	private Context context;
+
+	@Inject
+	private SurfaceSize surfaceSize;
 
 	private SoundPool soundPool;
 
-	private ScheduledExecutorService scheduledExec;
-	private List<ScheduledTasks> scheduledTasks;
-	private static long PERIODIC_DELAY = 25;
+	private List<Integer> soundIDs;
+	private List<Food> foods;
+	private List<Plate> plates;
 
 	private Bitmap background = null;
 
-	private Food actualFood;
-	private Plate actualPlate;
-
-	public KosherGame(KosherSurface _surface,
-			KosherSurfaceActivity _kosherSurfaceActivity) {
-		kosherSurface = _surface;
-		kosherSurfaceActivity = _kosherSurfaceActivity;
+	@Inject
+	public KosherFoodModel(Context context) {
+		Log.d("DI", "KosherFoodModel creation started...");
+		this.context = context;
+		RoboGuice.getInjector(context).injectMembers(this);
+		soundIDs = new ArrayList<Integer>();
 		foods = new ArrayList<Food>();
 		plates = new ArrayList<Plate>();
-		soundIDs = new ArrayList<Integer>();
-		scheduledTasks = new ArrayList<ScheduledTasks>();
-
-		new InitGameAsync(this).execute();
-
+		Log.d("DI", "KosherFoodModel created!");
 	}
 
+	public List<Food> getFoods() {
+		return foods;
+	}
+
+	public List<Plate> getPlates() {
+		return plates;
+	}
+
+	/**
+	 * This method should be called from an AsyncTask
+	 */
 	public void initGame() {
 		initDrawableObjects();
 		initSounds();
@@ -68,7 +74,7 @@ public class KosherGame {
 		opts.inPurgeable = true;
 		opts.inTempStorage = new byte[32 * 1024];
 
-		background = BitmapFactory.decodeResource(kosherSurface.getResources(),
+		background = BitmapFactory.decodeResource(context.getResources(),
 				hu.bme.aut.amorg.nyekilajos.kosherfood.R.drawable.background,
 				opts);
 
@@ -79,7 +85,7 @@ public class KosherGame {
 					300,
 					200,
 					BitmapFactory.decodeResource(
-							kosherSurface.getResources(),
+							context.getResources(),
 							hu.bme.aut.amorg.nyekilajos.kosherfood.R.drawable.pig,
 							opts), 100, 100));
 
@@ -89,7 +95,7 @@ public class KosherGame {
 					400,
 					200,
 					BitmapFactory.decodeResource(
-							kosherSurface.getResources(),
+							context.getResources(),
 							hu.bme.aut.amorg.nyekilajos.kosherfood.R.drawable.bug,
 							opts), 100, 100));
 
@@ -99,7 +105,7 @@ public class KosherGame {
 					500,
 					200,
 					BitmapFactory.decodeResource(
-							kosherSurface.getResources(),
+							context.getResources(),
 							hu.bme.aut.amorg.nyekilajos.kosherfood.R.drawable.milk,
 							opts), 100, 100));
 
@@ -109,7 +115,7 @@ public class KosherGame {
 					600,
 					200,
 					BitmapFactory.decodeResource(
-							kosherSurface.getResources(),
+							context.getResources(),
 							hu.bme.aut.amorg.nyekilajos.kosherfood.R.drawable.chicken,
 							opts), 100, 100));
 
@@ -119,7 +125,7 @@ public class KosherGame {
 					300,
 					300,
 					BitmapFactory.decodeResource(
-							kosherSurface.getResources(),
+							context.getResources(),
 							hu.bme.aut.amorg.nyekilajos.kosherfood.R.drawable.egg,
 							opts), 100, 100));
 
@@ -129,7 +135,7 @@ public class KosherGame {
 					400,
 					300,
 					BitmapFactory.decodeResource(
-							kosherSurface.getResources(),
+							context.getResources(),
 							hu.bme.aut.amorg.nyekilajos.kosherfood.R.drawable.fish,
 							opts), 100, 100));
 
@@ -139,66 +145,66 @@ public class KosherGame {
 					500,
 					300,
 					BitmapFactory.decodeResource(
-							kosherSurface.getResources(),
+							context.getResources(),
 							hu.bme.aut.amorg.nyekilajos.kosherfood.R.drawable.goose,
 							opts), 100, 100));
 		}
 
 		Bitmap platePicture = BitmapFactory.decodeResource(
-				kosherSurface.getResources(),
+				context.getResources(),
 				hu.bme.aut.amorg.nyekilajos.kosherfood.R.drawable.plate, opts);
 
 		Matrix matrix = new Matrix();
 		matrix.postRotate(90);
-		
+
 		synchronized (plates) {
-			
+
 			Bitmap rotatedBitmap = Bitmap.createBitmap(platePicture, 0, 0,
 					platePicture.getWidth(), platePicture.getHeight(), matrix,
 					true);
-			plates.add(new Plate(11, -80, kosherSurface.getHeight() / 2,
-					rotatedBitmap, 160, 240, this));
+			plates.add(new Plate(11, -80, surfaceSize.getSurfaceHeight() / 2,
+					rotatedBitmap, 160, 240, context));
 
 			matrix.postRotate(90);
 			rotatedBitmap = Bitmap.createBitmap(platePicture, 0, 0,
 					platePicture.getWidth(), platePicture.getHeight(), matrix,
 					true);
-			plates.add(new Plate(12, kosherSurface.getWidth() / 2, -80,
-					rotatedBitmap, 240, 160, this));
+			plates.add(new Plate(12, surfaceSize.getSurfaceWidth() / 2, -80,
+					rotatedBitmap, 240, 160, context));
 
 			matrix.postRotate(90);
 			rotatedBitmap = Bitmap.createBitmap(platePicture, 0, 0,
 					platePicture.getWidth(), platePicture.getHeight(), matrix,
 					true);
-			plates.add(new Plate(13, kosherSurface.getWidth() + 80,
-					kosherSurface.getHeight() / 2, rotatedBitmap, 160, 240, this));
+			plates.add(new Plate(13, surfaceSize.getSurfaceWidth() + 80,
+					surfaceSize.getSurfaceHeight() / 2, rotatedBitmap, 160,
+					240, context));
 
 			matrix.postRotate(90);
 			rotatedBitmap = Bitmap.createBitmap(platePicture, 0, 0,
 					platePicture.getWidth(), platePicture.getHeight(), matrix,
 					true);
-			plates.add(new Plate(14, kosherSurface.getWidth() / 2,
-					kosherSurface.getHeight() + 80, platePicture, 240, 160,
-					this));
+			plates.add(new Plate(14, surfaceSize.getSurfaceWidth() / 2,
+					surfaceSize.getSurfaceHeight() + 80, platePicture, 240,
+					160, context));
 		}
 
 	}
 
 	private void initSounds() {
 		soundPool = new SoundPool(4, AudioManager.STREAM_MUSIC, 0);
-		soundIDs.add(soundPool.load(kosherSurfaceActivity,
+		soundIDs.add(soundPool.load(context,
 				hu.bme.aut.amorg.nyekilajos.kosherfood.R.raw.newplate, 0));
-		soundIDs.add(soundPool.load(kosherSurfaceActivity,
+		soundIDs.add(soundPool.load(context,
 				hu.bme.aut.amorg.nyekilajos.kosherfood.R.raw.s01, 0));
-		soundIDs.add(soundPool.load(kosherSurfaceActivity,
+		soundIDs.add(soundPool.load(context,
 				hu.bme.aut.amorg.nyekilajos.kosherfood.R.raw.s02, 0));
-		soundIDs.add(soundPool.load(kosherSurfaceActivity,
+		soundIDs.add(soundPool.load(context,
 				hu.bme.aut.amorg.nyekilajos.kosherfood.R.raw.s03, 0));
 	}
 
 	private void initDatabase() {
-		FoodsDataSource foodsDataSource = new FoodsDataSource(
-				kosherSurfaceActivity);
+		FoodsDataSource foodsDataSource = new FoodsDataSource(context);
 		foodsDataSource.open();
 		foodsDataSource.truncateFoods();
 
@@ -249,7 +255,7 @@ public class KosherGame {
 		foodsDataSource.close();
 
 		NotKosherPairsDataSource notKosherPairsDataSource = new NotKosherPairsDataSource(
-				kosherSurfaceActivity);
+				context);
 		notKosherPairsDataSource.open();
 		notKosherPairsDataSource.truncateNotKosherPairs();
 
@@ -277,61 +283,16 @@ public class KosherGame {
 	}
 
 	public void setProgressDialog(String message) {
-		kosherSurfaceActivity.showProgressDialog(message);
+		KosherSurfaceActivity activity = (KosherSurfaceActivity) context;
+		activity.showProgressDialog(message);
 	}
 
 	public void dismissProgressDialog() {
-		kosherSurfaceActivity.dismissProgressDialog();
+		KosherSurfaceActivity activity = (KosherSurfaceActivity) context;
+		activity.dismissProgressDialog();
 	}
 
-	public void startGame() {
-		kosherSurface.startThread();
-		scheduledExec = Executors.newScheduledThreadPool(4);
-		scheduledTasks.add(new ScheduledTasks(
-				ScheduledTasks.ACTION_INIT_PLATES, this));
-		scheduledTasks
-				.add(new ScheduledTasks(ScheduledTasks.ACTION_IDLE, this));
-		scheduledTasks
-				.add(new ScheduledTasks(ScheduledTasks.ACTION_IDLE, this));
-		scheduledTasks
-				.add(new ScheduledTasks(ScheduledTasks.ACTION_IDLE, this));
-		for (ScheduledTasks scheduled : scheduledTasks) {
-			scheduledExec.scheduleWithFixedDelay(scheduled, 0, PERIODIC_DELAY,
-					TimeUnit.MILLISECONDS);
-		}
-
-	}
-
-	public void onTouch(View v, MotionEvent event) {
-		switch (event.getAction()) {
-		case MotionEvent.ACTION_DOWN:
-			// Log.d("ONTOUCH", "ACTION_DOWN");
-			actualFood = selectTouchableFood(event.getX(), event.getY());
-			Plate plate = selectTouchablePlate(event.getX(), event.getY());
-			if (plate != null)
-				RemoveFoodFromPlate(plate);
-
-		case MotionEvent.ACTION_MOVE:
-			// Log.d("ONTOUCH", "ACTION_MOVE");
-			if (actualFood != null) {
-				actualFood.setX(event.getX());
-				actualFood.setY(event.getY());
-			}
-			break;
-
-		case MotionEvent.ACTION_UP:
-			// Log.d("ONTOUCH", "ACTION_UP");
-			if (actualFood != null) {
-				actualPlate = selectPlate();
-				if (actualPlate != null)
-					PutFoodToPlate();
-			}
-			break;
-
-		}
-	}
-
-	private Food selectTouchableFood(float x, float y) {
+	public Food selectTouchableFood(float x, float y) {
 		synchronized (foods) {
 			for (Food food : foods) {
 				if (food.getRectF().contains(x, y))
@@ -342,7 +303,7 @@ public class KosherGame {
 		return null;
 	}
 
-	private Plate selectTouchablePlate(float x, float y) {
+	public Plate selectTouchablePlate(float x, float y) {
 		synchronized (plates) {
 			for (Plate plate : plates) {
 				if (plate.getRectF().contains(x, y))
@@ -353,7 +314,7 @@ public class KosherGame {
 		return null;
 	}
 
-	private Plate selectPlate() {
+	public Plate selectPlate(Food actualFood) {
 		synchronized (plates) {
 			for (Plate plate : plates) {
 				if (RectF.intersects(actualFood.getRectF(), plate.getRectF()))
@@ -364,7 +325,7 @@ public class KosherGame {
 		return null;
 	}
 
-	private void PutFoodToPlate() {
+	public void PutFoodToPlate(Food actualFood, Plate actualPlate) {
 		actualPlate.addFoodToPlate(actualFood);
 		if (actualFood.getId() < soundIDs.size())
 			soundPool.play(soundIDs.get(actualFood.getId()), 1, 1, 0, 0, 1);
@@ -374,33 +335,9 @@ public class KosherGame {
 		actualFood = null;
 	}
 
-	private void RemoveFoodFromPlate(Plate plate) {
-
-		if (!plate.isKosher()) {
-
+	public void RemoveFoodFromPlate(Plate plate) {
+		if(!plate.isKosher())
 			soundPool.play(soundIDs.get(0), 1, 1, 0, 0, 1);
-			plate.initCoordinates();
-
-			boolean foundIdleThread = false;
-			for (ScheduledTasks scheduled : scheduledTasks) {
-				if (scheduled.IsIdle() && foundIdleThread == false) {
-					Log.d("SCHEDULED", "IDLE");
-					scheduled.NewPlateAction(plate);
-					foundIdleThread = true;
-					break;
-				}
-				Log.d("SCHEDULED", "NOT_IDLE");
-			}
-			if (foundIdleThread == false) {
-				ScheduledTasks tempSch = new ScheduledTasks(
-						ScheduledTasks.ACTION_NEW_PLATE, plate);
-				scheduledTasks.add(tempSch);
-				scheduledExec.scheduleWithFixedDelay(tempSch, 0,
-						PERIODIC_DELAY, TimeUnit.MILLISECONDS);
-				Log.d("SCHEDULED", "NEW");
-			}
-		}
-
 		List<Food> removed = plate.removeFoodsFromPlate();
 		if (!removed.isEmpty() && removed != null)
 			synchronized (foods) {
@@ -409,23 +346,6 @@ public class KosherGame {
 					foods.add(food);
 				}
 			}
-
-	}
-
-	public KosherSurfaceActivity getKosherSurfaceActivity() {
-		return kosherSurfaceActivity;
-	}
-
-	public KosherSurface getKosherSurface() {
-		return kosherSurface;
-	}
-
-	public List<Food> getFoods() {
-		return foods;
-	}
-
-	public List<Plate> getPlates() {
-		return plates;
 	}
 
 	public void doDraw(Canvas canvas) {
@@ -435,8 +355,8 @@ public class KosherGame {
 			canvas.drawBitmap(
 					background,
 					null,
-					new Rect(0, 0, kosherSurface.getWidth(), kosherSurface
-							.getHeight()), null);
+					new Rect(0, 0, surfaceSize.getSurfaceWidth(), surfaceSize
+							.getSurfaceHeight()), null);
 
 		synchronized (plates) {
 			for (Plate plate : plates) {
@@ -452,9 +372,7 @@ public class KosherGame {
 
 	}
 
-	public void freeResources() {
-		if (actualFood != null)
-			actualFood.freeResources();
+	public void destroyModel() {
 		if (foods != null)
 			synchronized (foods) {
 				for (Food food : foods) {
@@ -472,9 +390,7 @@ public class KosherGame {
 		if (soundPool != null)
 			soundPool.release();
 
-		if (scheduledExec != null)
-			scheduledExec.shutdownNow();
-
 		background.recycle();
 	}
+
 }

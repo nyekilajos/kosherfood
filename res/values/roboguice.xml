@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string-array name="roboguice_modules">
+    <item>hu.bme.aut.amorg.nyekilajos.kosherfood.core.KosherFoodModule</item>
+  </string-array>
+</resources>

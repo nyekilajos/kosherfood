@@ -1,28 +1,36 @@
 package hu.bme.aut.amorg.nyekilajos.kosherfood.core;
 
-import android.os.AsyncTask;
+import com.google.inject.Inject;
 
-public class IsKosherAsync extends AsyncTask<Void, Void, Void>{
+import android.content.Context;
+import roboguice.util.RoboAsyncTask;
+
+public class IsKosherAsync extends RoboAsyncTask<Void> {
 
 	Plate plate;
 	KosherDbObj kosherDbObj;
-	
-	public IsKosherAsync(Plate _plate)
-	{
-		plate = _plate;
+
+	@Inject
+	public IsKosherAsync(Context context) {
+		super(context);
+		
+		this.plate = null;
 	}
-	
-	@Override
-	protected void onPostExecute(Void result) {
-		plate.postDbResultCallback(kosherDbObj);
-		super.onPostExecute(result);
+
+	public void setPlate(Plate _plate) {
+		plate = _plate;
 	}
 
 	@Override
-	protected Void doInBackground(Void... params) {
+	public Void call() throws Exception {
 		kosherDbObj = plate.searchDatabase();
 		return null;
 	}
-	
+
+	@Override
+	protected void onFinally() throws RuntimeException {
+		plate.postDbResultCallback(kosherDbObj);
+		super.onFinally();
+	}
 
 }

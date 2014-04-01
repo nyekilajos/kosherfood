@@ -1,19 +1,23 @@
 package hu.bme.aut.amorg.nyekilajos.kosherfood.activities;
 
+import com.google.inject.Inject;
+
 import hu.bme.aut.amorg.nyekilajos.kosherfood.core.KosherSurface;
-import android.app.Activity;
+import roboguice.activity.RoboActivity;
 import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.util.Log;
 
-public class KosherSurfaceActivity extends Activity {
+public class KosherSurfaceActivity extends RoboActivity {
 
+	@Inject
 	private KosherSurface kosherSurface;
 	private ProgressDialog progressDialog;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		kosherSurface = new KosherSurface(this, null, 0);
+		Log.d("DI", "KosherSurfaceActivity created");
 		kosherSurface.setOnTouchListener(kosherSurface);
 		setContentView(this.kosherSurface);
 	}

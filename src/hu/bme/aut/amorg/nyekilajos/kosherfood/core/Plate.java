@@ -8,23 +8,35 @@ import hu.bme.aut.amorg.nyekilajos.kosherfood.database.NotKosherPairsDataSource;
 import java.util.ArrayList;
 import java.util.List;
 
+import roboguice.RoboGuice;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.RectF;
 import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
+import android.util.Log;
+
+import com.google.inject.Inject;
 
 public class Plate extends Drawable {
 
 	private int id;
 	private List<Food> foodsInPlate;
-	private KosherGame kosherGame;
 
 	private KosherDbObj kosherDbObj;
 
+	private Context context;
+
+	@Inject
+	private IsKosherAsync isKosherAsync;
+
 	public Plate(int _id, float _init_x, float _init_y, Bitmap _picture,
-			float _width, float _height, KosherGame _kosherGame) {
+			float _width, float _height, Context context) {
+		Log.d("DI", "Plate creation started...");
+		RoboGuice.getInjector(context).injectMembers(this);
+		this.context = context;
 		id = _id;
 		init_x = _init_x;
 		init_y = _init_y;
@@ -33,11 +45,12 @@ public class Plate extends Drawable {
 		width = _width;
 		height = _height;
 		picture = _picture;
-		kosherGame = _kosherGame;
 
 		foodsInPlate = new ArrayList<Food>();
 
 		kosherDbObj = new KosherDbObj(true, "");
+
+		Log.d("DI", "Plate created");
 	}
 
 	/**
@@ -46,8 +59,7 @@ public class Plate extends Drawable {
 	 * IsKosherAsync (AsyncTask) calls it in doInBackground function.
 	 **/
 	public KosherDbObj searchDatabase() {
-		FoodsDataSource foodsDataSource = new FoodsDataSource(
-				kosherGame.getKosherSurfaceActivity());
+		FoodsDataSource foodsDataSource = new FoodsDataSource(context);
 
 		foodsDataSource.open();
 
@@ -64,7 +76,7 @@ public class Plate extends Drawable {
 		}
 
 		NotKosherPairsDataSource notKosherPairsDataSource = new NotKosherPairsDataSource(
-				kosherGame.getKosherSurfaceActivity());
+				context);
 
 		notKosherPairsDataSource.open();
 
@@ -109,7 +121,7 @@ public class Plate extends Drawable {
 
 	public void addFoodToPlate(Food food) {
 		foodsInPlate.add(food);
-		IsKosherAsync isKosherAsync = new IsKosherAsync(this);
+		isKosherAsync.setPlate(this);
 		isKosherAsync.execute();
 	}
 
@@ -122,8 +134,9 @@ public class Plate extends Drawable {
 	}
 
 	public RectF getInnerRectF() {
-		return new RectF((float) (x - width * 0.3), (float) (y - height * 0.08),
-				(float) (x + width * 0.1), (float) (y + height * 0.2));
+		return new RectF((float) (x - width * 0.3),
+				(float) (y - height * 0.08), (float) (x + width * 0.1),
+				(float) (y + height * 0.2));
 	}
 
 	@Override

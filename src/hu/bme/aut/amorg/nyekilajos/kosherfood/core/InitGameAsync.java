@@ -1,33 +1,45 @@
 package hu.bme.aut.amorg.nyekilajos.kosherfood.core;
 
-import android.os.AsyncTask;
+import roboguice.RoboGuice;
+import roboguice.util.RoboAsyncTask;
+import android.content.Context;
+import android.util.Log;
 
-public class InitGameAsync extends AsyncTask<Void, Void, Void> {
+import com.google.inject.Inject;
 
-	private KosherGame kosherGame;
+public class InitGameAsync extends RoboAsyncTask<Void> {
 
-	public InitGameAsync(KosherGame kosherGame) {
-		super();
-		this.kosherGame = kosherGame;
+	@Inject
+	private KosherFoodModel kosherFoodModel;
+	
+	@Inject
+	private KosherController kosherController;
+
+	@Inject
+	protected InitGameAsync(Context context) {
+		super(context);
+		Log.d("DI", "InitGameAsync creation started...");
+		RoboGuice.getInjector(context).injectMembers(this);
+		Log.d("DI", "InitGameAsync created");
+
 	}
 
 	@Override
-	protected void onPreExecute() {
-		kosherGame.setProgressDialog("Loading game... Please wait!");
+	protected void onPreExecute() throws Exception {
+		kosherFoodModel.setProgressDialog("Loading game... Please wait!");
 		super.onPreExecute();
 	}
 
 	@Override
-	protected Void doInBackground(Void... params) {
-		kosherGame.initGame();
+	public Void call() throws Exception {
+		kosherFoodModel.initGame();
 		return null;
 	}
 
 	@Override
-	protected void onPostExecute(Void result) {
-		kosherGame.dismissProgressDialog();
-		kosherGame.startGame();
-		super.onPostExecute(result);
+	protected void onFinally() throws RuntimeException {
+		kosherFoodModel.dismissProgressDialog();
+		kosherController.startGame();
+		super.onFinally();
 	}
-
 }
