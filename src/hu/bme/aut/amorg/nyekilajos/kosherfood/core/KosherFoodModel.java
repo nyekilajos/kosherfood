@@ -204,7 +204,7 @@ public class KosherFoodModel {
 	}
 
 	private void initDatabase() {
-		FoodsDataSource foodsDataSource = new FoodsDataSource(context);
+		FoodsDataSource foodsDataSource = RoboGuice.getInjector(context).getInstance(FoodsDataSource.class);
 		foodsDataSource.open();
 		foodsDataSource.truncateFoods();
 
@@ -254,8 +254,7 @@ public class KosherFoodModel {
 
 		foodsDataSource.close();
 
-		NotKosherPairsDataSource notKosherPairsDataSource = new NotKosherPairsDataSource(
-				context);
+		NotKosherPairsDataSource notKosherPairsDataSource = RoboGuice.getInjector(context).getInstance(NotKosherPairsDataSource.class);
 		notKosherPairsDataSource.open();
 		notKosherPairsDataSource.truncateNotKosherPairs();
 

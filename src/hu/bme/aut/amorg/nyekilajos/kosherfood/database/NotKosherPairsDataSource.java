@@ -1,5 +1,9 @@
 package hu.bme.aut.amorg.nyekilajos.kosherfood.database;
 
+import roboguice.RoboGuice;
+
+import com.google.inject.Inject;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -15,8 +19,9 @@ public class NotKosherPairsDataSource implements DataSourceInterface {
 			KosherDbHelper.COLUMN_FOOD_ID_SECOND,
 			KosherDbHelper.COLUMN_INFORMATION };
 
+	@Inject
 	public NotKosherPairsDataSource(Context context) {
-		kosherDbHelper = new KosherDbHelper(context);
+		kosherDbHelper = RoboGuice.getInjector(context).getInstance(KosherDbHelper.class);
 	}
 
 	@Override

@@ -1,12 +1,14 @@
 package hu.bme.aut.amorg.nyekilajos.kosherfood.core;
 
 import roboguice.RoboGuice;
+import roboguice.inject.ContextSingleton;
 import roboguice.util.RoboAsyncTask;
 import android.content.Context;
 import android.util.Log;
 
 import com.google.inject.Inject;
 
+@ContextSingleton
 public class InitGameAsync extends RoboAsyncTask<Void> {
 
 	@Inject

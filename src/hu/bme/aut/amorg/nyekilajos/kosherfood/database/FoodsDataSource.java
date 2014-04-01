@@ -1,5 +1,7 @@
 package hu.bme.aut.amorg.nyekilajos.kosherfood.database;
 
+import com.google.inject.Inject;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -14,6 +16,7 @@ public class FoodsDataSource implements DataSourceInterface {
 			KosherDbHelper.COLUMN_NAME, KosherDbHelper.COLUMN_IS_KOSHER,
 			KosherDbHelper.COLUMN_INFORMATION };
 
+	@Inject
 	public FoodsDataSource(Context context) {
 		kosherDbHelper = new KosherDbHelper(context);
 	}

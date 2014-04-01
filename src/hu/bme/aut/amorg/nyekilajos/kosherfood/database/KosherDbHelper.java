@@ -1,5 +1,7 @@
 package hu.bme.aut.amorg.nyekilajos.kosherfood.database;
 
+import com.google.inject.Inject;
+
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -31,6 +33,7 @@ public class KosherDbHelper extends SQLiteOpenHelper {
 			+ " integer not null, " + COLUMN_FOOD_ID_SECOND
 			+ " integer not null, " + COLUMN_INFORMATION + " text not null);";
 
+	@Inject
 	public KosherDbHelper(Context context) {
 		super(context, DATABASE_NAME, null, DATATBASE_VERSION);
 	}

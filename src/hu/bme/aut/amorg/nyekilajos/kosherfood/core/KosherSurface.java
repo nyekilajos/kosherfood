@@ -1,6 +1,7 @@
 package hu.bme.aut.amorg.nyekilajos.kosherfood.core;
 
 import roboguice.RoboGuice;
+import roboguice.inject.ContextSingleton;
 import android.content.Context;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -11,6 +12,7 @@ import android.view.View.OnTouchListener;
 
 import com.google.inject.Inject;
 
+@ContextSingleton
 public class KosherSurface extends SurfaceView implements
 		SurfaceHolder.Callback, OnTouchListener {
 
@@ -25,6 +27,7 @@ public class KosherSurface extends SurfaceView implements
 
 	private SurfaceHolder holder;
 
+	@Inject
 	public KosherSurface(Context context) {
 		super(context);
 		Log.d("DI", "KosherSurface creation started...");
