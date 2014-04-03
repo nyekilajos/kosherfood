@@ -11,6 +11,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 public class NotKosherPairsDataSource implements DataSourceInterface {
 
+	@Inject
 	private KosherDbHelper kosherDbHelper;
 	private SQLiteDatabase database;
 
@@ -21,7 +22,7 @@ public class NotKosherPairsDataSource implements DataSourceInterface {
 
 	@Inject
 	public NotKosherPairsDataSource(Context context) {
-		kosherDbHelper = RoboGuice.getInjector(context).getInstance(KosherDbHelper.class);
+		RoboGuice.getInjector(context).injectMembers(this);
 	}
 
 	@Override
@@ -87,7 +88,10 @@ public class NotKosherPairsDataSource implements DataSourceInterface {
 
 			// If there is still no result, then it is not in the database
 			if (cursor == null || cursor.getCount() == 0)
+			{
+				cursor.close();
 				return null;
+			}
 		}
 
 		// If found appropriate record, it is processed

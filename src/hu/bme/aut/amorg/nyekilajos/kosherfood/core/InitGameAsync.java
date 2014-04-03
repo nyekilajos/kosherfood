@@ -18,7 +18,7 @@ public class InitGameAsync extends RoboAsyncTask<Void> {
 	private KosherController kosherController;
 
 	@Inject
-	protected InitGameAsync(Context context) {
+	public InitGameAsync(Context context) {
 		super(context);
 		Log.d("DI", "InitGameAsync creation started...");
 		RoboGuice.getInjector(context).injectMembers(this);
@@ -27,7 +27,7 @@ public class InitGameAsync extends RoboAsyncTask<Void> {
 	}
 
 	@Override
-	protected void onPreExecute() throws Exception {
+	public void onPreExecute() throws Exception {
 		kosherFoodModel.setProgressDialog("Loading game... Please wait!");
 		super.onPreExecute();
 	}
@@ -39,7 +39,7 @@ public class InitGameAsync extends RoboAsyncTask<Void> {
 	}
 
 	@Override
-	protected void onFinally() throws RuntimeException {
+	public void onFinally() throws RuntimeException {
 		kosherFoodModel.dismissProgressDialog();
 		kosherController.startGame();
 		super.onFinally();

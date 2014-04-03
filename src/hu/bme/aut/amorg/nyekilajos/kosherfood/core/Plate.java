@@ -96,7 +96,10 @@ public class Plate extends Drawable {
 		}
 
 		notKosherPairsDataSource.close();
-		return new KosherDbObj(true, foodDbObjList.get(0).getInformation());
+		if(foodDbObjList.size() != 0)
+			return new KosherDbObj(true, foodDbObjList.get(0).getInformation());
+		else
+			return new KosherDbObj(true, "");
 	}
 
 	/**

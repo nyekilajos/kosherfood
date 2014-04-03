@@ -1,5 +1,7 @@
 package hu.bme.aut.amorg.nyekilajos.kosherfood.database;
 
+import roboguice.RoboGuice;
+
 import com.google.inject.Inject;
 
 import android.content.ContentValues;
@@ -9,7 +11,9 @@ import android.database.sqlite.SQLiteDatabase;
 
 public class FoodsDataSource implements DataSourceInterface {
 
+	@Inject
 	private KosherDbHelper kosherDbHelper;
+	
 	private SQLiteDatabase database;
 
 	private final static String[] allColumns = { KosherDbHelper.COLUMN_ID,
@@ -18,7 +22,7 @@ public class FoodsDataSource implements DataSourceInterface {
 
 	@Inject
 	public FoodsDataSource(Context context) {
-		kosherDbHelper = new KosherDbHelper(context);
+		RoboGuice.getInjector(context).injectMembers(this);
 	}
 
 	@Override

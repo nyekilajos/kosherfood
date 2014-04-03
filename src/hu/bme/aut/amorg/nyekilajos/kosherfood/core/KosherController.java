@@ -49,11 +49,13 @@ public class KosherController {
 		Log.d("DI", "KosherController created!");
 	}
 
-	public void startInit(SurfaceHolder _holder) {
+	public void setHolder(SurfaceHolder _holder) {
 		holder = _holder;
 	}
 
 	public void startGame() {
+		if(holder == null)
+			throw new NullPointerException();
 		gameThread.setHolder(holder);
 		gameThread.start();
 		scheduledExec = Executors.newScheduledThreadPool(4);
@@ -68,13 +70,6 @@ public class KosherController {
 		scheduled = RoboGuice.getInjector(context).getInstance(ScheduledTasks.class).setAction(ScheduledTasks.ACTION_IDLE);
 		scheduledTasksList.add(scheduled);
 	
-		
-		/*
-		scheduledTasks
-				.add(new ScheduledTasks(ScheduledTasks.ACTION_INIT_PLATES));
-		scheduledTasks.add(new ScheduledTasks(ScheduledTasks.ACTION_IDLE));
-		scheduledTasks.add(new ScheduledTasks(ScheduledTasks.ACTION_IDLE));
-		scheduledTasks.add(new ScheduledTasks(ScheduledTasks.ACTION_IDLE));*/
 		for (ScheduledTasks scheduledItem : scheduledTasksList) {
 			scheduledExec.scheduleWithFixedDelay(scheduledItem, 0, PERIODIC_DELAY,
 					TimeUnit.MILLISECONDS);

@@ -48,7 +48,7 @@ public class KosherSurface extends SurfaceView implements
 	public void surfaceCreated(SurfaceHolder holder) {
 		surfaceSize.setSurfaceWidth(this.getWidth());
 		surfaceSize.setSurfaceHeight(this.getHeight());
-		kosherController.startInit(holder);
+		kosherController.setHolder(holder);
 		initGameAsync.execute();
 	}
 

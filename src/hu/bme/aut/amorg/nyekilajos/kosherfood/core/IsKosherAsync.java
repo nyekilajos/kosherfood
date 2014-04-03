@@ -28,7 +28,7 @@ public class IsKosherAsync extends RoboAsyncTask<Void> {
 	}
 
 	@Override
-	protected void onFinally() throws RuntimeException {
+	public void onFinally() throws RuntimeException {
 		plate.postDbResultCallback(kosherDbObj);
 		super.onFinally();
 	}
