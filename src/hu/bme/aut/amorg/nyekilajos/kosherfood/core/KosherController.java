@@ -1,11 +1,5 @@
 package hu.bme.aut.amorg.nyekilajos.kosherfood.core;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
-
 import roboguice.RoboGuice;
 import roboguice.inject.ContextSingleton;
 import android.content.Context;
@@ -29,9 +23,13 @@ public class KosherController {
 	
 	private SurfaceHolder holder;
 
+	@Inject
+	private TaskScheduler taskScheduler;
+	
+	/*
 	private ScheduledExecutorService scheduledExec;
 	private List<ScheduledTasks> scheduledTasksList;
-	private static long PERIODIC_DELAY = 25;
+	private static long PERIODIC_DELAY = 25;*/
 
 	private Food actualFood;
 	private Plate actualPlate;
@@ -45,7 +43,8 @@ public class KosherController {
 		kosherFoodModel = RoboGuice.getInjector(context).getInstance(
 				KosherFoodModel.class);
 		gameThread= RoboGuice.getInjector(context).getInstance(GameThread.class);
-		scheduledTasksList = new ArrayList<ScheduledTasks>();
+		taskScheduler = RoboGuice.getInjector(context).getInstance(TaskScheduler.class);
+		//scheduledTasksList = new ArrayList<ScheduledTasks>();
 		Log.d("DI", "KosherController created!");
 	}
 
@@ -58,7 +57,7 @@ public class KosherController {
 			throw new NullPointerException();
 		gameThread.setHolder(holder);
 		gameThread.start();
-		scheduledExec = Executors.newScheduledThreadPool(4);
+		/*scheduledExec = Executors.newScheduledThreadPool(4);
 	
 		ScheduledTasks scheduled = RoboGuice.getInjector(context).getInstance(ScheduledTasks.class).setAction(ScheduledTasks.ACTION_INIT_PLATES);
 		scheduledTasksList.add(scheduled);
@@ -70,10 +69,12 @@ public class KosherController {
 		scheduled = RoboGuice.getInjector(context).getInstance(ScheduledTasks.class).setAction(ScheduledTasks.ACTION_IDLE);
 		scheduledTasksList.add(scheduled);
 	
-		for (ScheduledTasks scheduledItem : scheduledTasksList) {
+		for (Runnable scheduledItem : scheduledTasksList) {
 			scheduledExec.scheduleWithFixedDelay(scheduledItem, 0, PERIODIC_DELAY,
 					TimeUnit.MILLISECONDS);
-		}
+		}*/
+		
+		taskScheduler.add(RoboGuice.getInjector(context).getInstance(ScheduledTaskInit.class));
 
 	}
 
@@ -111,6 +112,8 @@ public class KosherController {
 	private void RemoveFoodFromPlate(Plate plate) {
 
 		if (!plate.isKosher()) {
+			taskScheduler.add(RoboGuice.getInjector(context).getInstance(ScheduledTaskNewPlate.class).setPlate(plate));
+			/*
 			plate.initCoordinates();
 
 			boolean foundIdleThread = false;
@@ -129,7 +132,7 @@ public class KosherController {
 				scheduledExec.scheduleWithFixedDelay(tempSch, 0,
 						PERIODIC_DELAY, TimeUnit.MILLISECONDS);
 				Log.d("SCHEDULED", "NEW");
-			}
+			}*/
 		}
 		kosherFoodModel.RemoveFoodFromPlate(plate);
 	}
@@ -151,8 +154,11 @@ public class KosherController {
 
 				kosherFoodModel.destroyModel();
 
+				taskScheduler.shutDown();
+				
+				/*
 				if (scheduledExec != null)
-					scheduledExec.shutdownNow();
+					scheduledExec.shutdownNow();*/
 			}
 		}
 

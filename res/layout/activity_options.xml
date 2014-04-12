@@ -1,7 +1,8 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
@@ -11,6 +12,32 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/hello_world" />
+        android:text="@string/number_of_plates" />
 
-</RelativeLayout>
+    <RadioGroup
+        android:checkedButton="@+id/rb_four_plate"
+        android:id="@+id/rg_plate_number"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        
+        <RadioButton 
+            android:id="@+id/rb_one_plate"
+            android:layout_width="fill_parent"
+        	android:layout_height="wrap_content"
+        	android:text="@string/one_plate"/>
+        <RadioButton
+            android:id="@+id/rb_four_plate"
+            android:layout_width="fill_parent"
+        	android:layout_height="wrap_content"
+        	android:text="@string/four_plate"/>
+        </RadioGroup>
+        
+    <CheckBox 
+        android:id="@+id/cb_enable_sounds"
+        android:text="@string/enable_sounds"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:checked="true"
+        android:layout_marginTop="30dp"/>
+    
+</LinearLayout>

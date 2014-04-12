@@ -80,5 +80,11 @@ public class Drawable {
 		if (picture != null)
 			picture.recycle();
 	}
+	
+	public void moveRelative(float dx, float dy)
+	{
+		this.x+=dx;
+		this.y+=dy;		
+	}
 
 }
