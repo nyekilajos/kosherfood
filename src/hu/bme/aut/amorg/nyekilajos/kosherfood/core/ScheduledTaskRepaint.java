@@ -10,7 +10,7 @@ import android.view.SurfaceHolder;
 import com.google.inject.Inject;
 
 @ContextSingleton
-public class GameThread extends Thread {
+public class ScheduledTaskRepaint extends ScheduledTask implements Runnable{
 
 	@Inject
 	private KosherFoodModel kosherFoodModel;
@@ -20,15 +20,16 @@ public class GameThread extends Thread {
 	private boolean running = false;
 
 	@Inject
-	public GameThread(Context context) {
-		Log.d("DI", "GameThread creation started...");
+	public ScheduledTaskRepaint(Context context) {
+		Log.d("DI", "ScheduledTaskRepaint creation started...");
 		RoboGuice.getInjector(context).injectMembers(this);
-		Log.d("DI", "Gamethread created!");
+		Log.d("DI", "ScheduledTaskRepaint created!");
 	}
 
-	public void setHolder(SurfaceHolder _holder) {
+	public ScheduledTaskRepaint setHolder(SurfaceHolder _holder) {
 		holder = _holder;
 		running = true;
+		return this;
 	}
 
 	@Override
@@ -40,12 +41,8 @@ public class GameThread extends Thread {
 				canvas = this.holder.lockCanvas(null);
 				synchronized (this.holder) {
 					kosherFoodModel.doDraw(canvas);
-					Thread.sleep(10);
 				}
 
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
 			} finally {
 
 				if (canvas != null) {
@@ -56,9 +53,10 @@ public class GameThread extends Thread {
 		}
 
 	}
-
-	public void stopRunning() {
-		running = false;
+	
+	@Override
+	public boolean isFinished() {
+		return false;
 	}
 
 }

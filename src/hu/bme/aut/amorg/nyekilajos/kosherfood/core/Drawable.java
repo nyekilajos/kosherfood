@@ -83,8 +83,12 @@ public class Drawable {
 	
 	public void moveRelative(float dx, float dy)
 	{
-		this.x+=dx;
-		this.y+=dy;		
+		synchronized (this) {
+			this.x+=dx;
+		}
+		synchronized (this) {
+			this.y+=dy;	
+		}			
 	}
 
 }

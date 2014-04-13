@@ -1,5 +1,7 @@
 package hu.bme.aut.amorg.nyekilajos.kosherfood.core;
 
+import android.util.Log;
+
 public class ScheduledTaskNewPlate extends ScheduledTask implements Runnable {
 
 	private Plate plate;
@@ -7,6 +9,13 @@ public class ScheduledTaskNewPlate extends ScheduledTask implements Runnable {
 	private float destinationX, destinationY;
 
 	private int directionX, directionY;
+
+	private Object sync = new Object();
+	
+	public ScheduledTaskNewPlate()
+	{
+		Log.d("Task Scheduler", "ScheduledTaskNewPlate created");
+	}
 
 	public ScheduledTaskNewPlate setPlate(Plate plate) {
 		this.plate = plate;
@@ -17,14 +26,19 @@ public class ScheduledTaskNewPlate extends ScheduledTask implements Runnable {
 
 		if (destinationX - plate.getX() < 0)
 			directionX = -1;
-		else
+		else if (destinationX - plate.getX() > 0)
 			directionX = 1;
+		else
+			directionX = 0;
 
 		if (destinationY - plate.getY() < 0)
 			directionY = -1;
+		else if (destinationY - plate.getY() > 0)
+			directionY = 1;
 		else
-			directionX = 1;
+			directionY = 0;
 
+		Log.d("Task Scheduler", "Plate set");
 		return this;
 	}
 
@@ -34,35 +48,43 @@ public class ScheduledTaskNewPlate extends ScheduledTask implements Runnable {
 			throw new NullPointerException(
 					"public void setPlate(Plate plate) function must be called before scheduling this task.");
 
-		if (directionX == 1) {
-			if (destinationX < plate.getX())
-				plate.moveRelative(1, 0);
-			else
-				directionX = 0;
-		} else {
-			if (destinationX > plate.getX())
-				plate.moveRelative(-1, 0);
-			else
-				directionX = 0;
+		synchronized (sync) {
+			if (directionX == 1) {
+				if (destinationX > plate.getX()) {
+					plate.moveRelative(1, 0);
+				}
+				else
+					directionX = 0;
+			} else {
+				Log.d("Task Scheduler", "destX,actualX: " + Float.toString(destinationX) + Float.toString(plate.getX()));
+				if (destinationX < plate.getX()) {
+					plate.moveRelative(-1, 0);
+				} else
+					directionX = 0;
+			}
+			if (directionY == 1) {
+				if (destinationY > plate.getY()) {
+					plate.moveRelative(0, 1);
+				} else
+					directionY = 0;
+			} else {
+				if (destinationY < plate.getY()) {
+					plate.moveRelative(0, -1);
+				} else
+					directionY = 0;
+			}
 		}
 
-		if (directionY == 1) {
-			if (destinationY < plate.getY())
-				plate.moveRelative(0, 1);
-			else
-				directionY = 0;
-		} else {
-			if (destinationY > plate.getY())
-				plate.moveRelative(0, -1);
-			else
-				directionY = 0;
-		}
 	}
 
 	@Override
 	public boolean isFinished() {
-		if (directionX == 0 && directionY == 0)
-			return true;
+		synchronized (sync) {
+			if (directionX == 0 && directionY == 0) {
+				return true;
+			}
+		}
+		Log.d("Task Scheduler", "ScheduledTask finished");
 		return false;
 	}
 

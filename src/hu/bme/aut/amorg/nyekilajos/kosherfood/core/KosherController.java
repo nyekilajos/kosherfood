@@ -14,22 +14,14 @@ import com.google.inject.Inject;
 public class KosherController {
 
 	@Inject
-	private GameThread gameThread;
-	
-	@Inject
 	private KosherFoodModel kosherFoodModel;
 
 	private Context context;
-	
+
 	private SurfaceHolder holder;
 
 	@Inject
 	private TaskScheduler taskScheduler;
-	
-	/*
-	private ScheduledExecutorService scheduledExec;
-	private List<ScheduledTasks> scheduledTasksList;
-	private static long PERIODIC_DELAY = 25;*/
 
 	private Food actualFood;
 	private Plate actualPlate;
@@ -37,14 +29,13 @@ public class KosherController {
 	@Inject
 	public KosherController(Context context) {
 		Log.d("DI", "KosherController creation started...");
-		if(context == null)
+		if (context == null)
 			Log.d("DI", "Context null");
 		this.context = context;
 		kosherFoodModel = RoboGuice.getInjector(context).getInstance(
 				KosherFoodModel.class);
-		gameThread= RoboGuice.getInjector(context).getInstance(GameThread.class);
-		taskScheduler = RoboGuice.getInjector(context).getInstance(TaskScheduler.class);
-		//scheduledTasksList = new ArrayList<ScheduledTasks>();
+		taskScheduler = RoboGuice.getInjector(context).getInstance(
+				TaskScheduler.class);
 		Log.d("DI", "KosherController created!");
 	}
 
@@ -53,28 +44,13 @@ public class KosherController {
 	}
 
 	public void startGame() {
-		if(holder == null)
+		if (holder == null)
 			throw new NullPointerException();
-		gameThread.setHolder(holder);
-		gameThread.start();
-		/*scheduledExec = Executors.newScheduledThreadPool(4);
-	
-		ScheduledTasks scheduled = RoboGuice.getInjector(context).getInstance(ScheduledTasks.class).setAction(ScheduledTasks.ACTION_INIT_PLATES);
-		scheduledTasksList.add(scheduled);
-	
-		scheduled = RoboGuice.getInjector(context).getInstance(ScheduledTasks.class).setAction(ScheduledTasks.ACTION_IDLE);
-		scheduledTasksList.add(scheduled);
-		scheduled = RoboGuice.getInjector(context).getInstance(ScheduledTasks.class).setAction(ScheduledTasks.ACTION_IDLE);
-		scheduledTasksList.add(scheduled);
-		scheduled = RoboGuice.getInjector(context).getInstance(ScheduledTasks.class).setAction(ScheduledTasks.ACTION_IDLE);
-		scheduledTasksList.add(scheduled);
-	
-		for (Runnable scheduledItem : scheduledTasksList) {
-			scheduledExec.scheduleWithFixedDelay(scheduledItem, 0, PERIODIC_DELAY,
-					TimeUnit.MILLISECONDS);
-		}*/
-		
-		taskScheduler.add(RoboGuice.getInjector(context).getInstance(ScheduledTaskInit.class));
+
+		taskScheduler.add(RoboGuice.getInjector(context)
+				.getInstance(ScheduledTaskRepaint.class).setHolder(holder));
+		taskScheduler.add(RoboGuice.getInjector(context).getInstance(
+				ScheduledTaskInit.class));
 
 	}
 
@@ -112,55 +88,21 @@ public class KosherController {
 	private void RemoveFoodFromPlate(Plate plate) {
 
 		if (!plate.isKosher()) {
-			taskScheduler.add(RoboGuice.getInjector(context).getInstance(ScheduledTaskNewPlate.class).setPlate(plate));
-			/*
-			plate.initCoordinates();
-
-			boolean foundIdleThread = false;
-			for (ScheduledTasks scheduled : scheduledTasksList) {
-				if (scheduled.IsIdle() && foundIdleThread == false) {
-					Log.d("SCHEDULED", "IDLE");
-					scheduled.setAction(ScheduledTasks.ACTION_NEW_PLATE, plate);
-					foundIdleThread = true;
-					break;
-				}
-				Log.d("SCHEDULED", "NOT_IDLE");
-			}
-			if (foundIdleThread == false) {
-				ScheduledTasks tempSch = RoboGuice.getInjector(context).getInstance(ScheduledTasks.class).setAction(ScheduledTasks.ACTION_NEW_PLATE, plate);
-				scheduledTasksList.add(tempSch);
-				scheduledExec.scheduleWithFixedDelay(tempSch, 0,
-						PERIODIC_DELAY, TimeUnit.MILLISECONDS);
-				Log.d("SCHEDULED", "NEW");
-			}*/
+			taskScheduler.add(RoboGuice.getInjector(context)
+					.getInstance(ScheduledTaskNewPlate.class).setPlate(plate));
 		}
 		kosherFoodModel.RemoveFoodFromPlate(plate);
 	}
 
 	public void destroyGame() {
 
-		boolean retry = true;
+		if (actualFood != null)
+			actualFood.freeResources();
 
-		gameThread.stopRunning();
-		while (retry) {
-			try {
-				gameThread.join();
-				retry = false;
-			} catch (InterruptedException e) {
+		kosherFoodModel.destroyModel();
 
-			} finally {
-				if (actualFood != null)
-					actualFood.freeResources();
-
-				kosherFoodModel.destroyModel();
-
-				taskScheduler.shutDown();
-				
-				/*
-				if (scheduledExec != null)
-					scheduledExec.shutdownNow();*/
-			}
-		}
+		taskScheduler.shutDown();
 
 	}
+
 }
