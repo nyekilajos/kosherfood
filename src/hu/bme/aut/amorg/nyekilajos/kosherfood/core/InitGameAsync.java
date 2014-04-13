@@ -3,6 +3,7 @@ package hu.bme.aut.amorg.nyekilajos.kosherfood.core;
 import roboguice.RoboGuice;
 import roboguice.inject.ContextSingleton;
 import roboguice.util.RoboAsyncTask;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.util.Log;
 
@@ -13,22 +14,29 @@ public class InitGameAsync extends RoboAsyncTask<Void> {
 
 	@Inject
 	private KosherFoodModel kosherFoodModel;
-	
+
 	@Inject
 	private KosherController kosherController;
+
+	private ProgressDialog progressDialog;
 
 	@Inject
 	public InitGameAsync(Context context) {
 		super(context);
 		Log.d("DI", "InitGameAsync creation started...");
 		RoboGuice.getInjector(context).injectMembers(this);
+		progressDialog = new ProgressDialog(context);
 		Log.d("DI", "InitGameAsync created");
 
 	}
 
 	@Override
 	public void onPreExecute() throws Exception {
-		kosherFoodModel.setProgressDialog("Loading game... Please wait!");
+		if (progressDialog != null) {
+			progressDialog.setCancelable(false);
+			progressDialog.setMessage("Loading game... Please wait!");
+			progressDialog.show();
+		}
 		super.onPreExecute();
 	}
 
@@ -40,7 +48,8 @@ public class InitGameAsync extends RoboAsyncTask<Void> {
 
 	@Override
 	public void onFinally() throws RuntimeException {
-		kosherFoodModel.dismissProgressDialog();
+		if (progressDialog != null)
+			progressDialog.dismiss();
 		kosherController.startGame();
 		super.onFinally();
 	}

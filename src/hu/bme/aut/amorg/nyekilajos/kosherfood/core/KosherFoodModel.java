@@ -1,7 +1,5 @@
 package hu.bme.aut.amorg.nyekilajos.kosherfood.core;
 
-import hu.bme.aut.amorg.nyekilajos.kosherfood.activities.KosherSurfaceActivity;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +13,6 @@ import android.media.SoundPool;
 import android.util.Log;
 
 import com.google.inject.Inject;
-
 
 public abstract class KosherFoodModel {
 
@@ -55,16 +52,6 @@ public abstract class KosherFoodModel {
 	 * This method should be called from an AsyncTask
 	 */
 	public abstract void initGame();
-
-	public void setProgressDialog(String message) {
-		KosherSurfaceActivity activity = (KosherSurfaceActivity) context;
-		activity.showProgressDialog(message);
-	}
-
-	public void dismissProgressDialog() {
-		KosherSurfaceActivity activity = (KosherSurfaceActivity) context;
-		activity.dismissProgressDialog();
-	}
 
 	public Food selectTouchableFood(float x, float y) {
 		synchronized (foods) {
