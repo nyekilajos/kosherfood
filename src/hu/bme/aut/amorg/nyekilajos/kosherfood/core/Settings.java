@@ -4,10 +4,14 @@ import com.google.inject.Singleton;
 
 @Singleton
 public class Settings {
+
 	private int playerNum;
 	private String language;
 	private boolean enableSounds;
 
+	public static final String PREFERENCES_FILE_NAME = "KosherSettings";
+	public static final String PLAYER_NUM_FIELD = "PlayerNum";
+	public static final String SOUND_ENABLED_FIELD = "SoundEnabled";
 
 	public int getPlayerNum() {
 		return playerNum;

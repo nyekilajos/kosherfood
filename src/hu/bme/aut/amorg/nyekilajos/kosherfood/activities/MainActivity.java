@@ -1,9 +1,13 @@
 package hu.bme.aut.amorg.nyekilajos.kosherfood.activities;
 
+import com.google.inject.Inject;
+
 import hu.bme.aut.amorg.nyekilajos.kosherfood.R;
+import hu.bme.aut.amorg.nyekilajos.kosherfood.core.Settings;
 import roboguice.activity.RoboActivity;
 import roboguice.inject.InjectView;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -26,10 +30,15 @@ public class MainActivity extends RoboActivity {
 	@InjectView(R.id.btn_exit)
 	private Button btn_exit;
 
+	@Inject
+	private Settings settings;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+
+		loadSettings();
 
 		btn_start.setOnClickListener(new OnClickListener() {
 
@@ -86,6 +95,14 @@ public class MainActivity extends RoboActivity {
 
 			}
 		});
+	}
+
+	private void loadSettings() {
+		SharedPreferences sp = getSharedPreferences(
+				Settings.PREFERENCES_FILE_NAME, MODE_PRIVATE);
+		settings.setPlayerNum(sp.getInt(Settings.PLAYER_NUM_FIELD, 4));
+		settings.setEnableSounds(sp.getBoolean(Settings.SOUND_ENABLED_FIELD,
+				true));
 	}
 
 }
