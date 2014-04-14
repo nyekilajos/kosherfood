@@ -21,6 +21,7 @@ public abstract class KosherFoodModel {
 	@Inject
 	protected SurfaceSize surfaceSize;
 
+	@Inject
 	protected SoundPool soundPool;
 
 	protected List<Integer> soundIDs;

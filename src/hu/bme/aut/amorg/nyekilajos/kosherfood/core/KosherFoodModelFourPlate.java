@@ -9,16 +9,13 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
-import android.media.AudioManager;
-import android.media.SoundPool;
 
-public class KosherFoodModelFourPlate extends KosherFoodModel{
+public class KosherFoodModelFourPlate extends KosherFoodModel {
 
 	public KosherFoodModelFourPlate(Context context) {
 		super(context);
 	}
-	
-	
+
 	/**
 	 * This method should be called from an AsyncTask
 	 */
@@ -153,7 +150,6 @@ public class KosherFoodModelFourPlate extends KosherFoodModel{
 	}
 
 	private void initSounds() {
-		soundPool = new SoundPool(4, AudioManager.STREAM_MUSIC, 0);
 		soundIDs.add(soundPool.load(context,
 				hu.bme.aut.amorg.nyekilajos.kosherfood.R.raw.newplate, 0));
 		soundIDs.add(soundPool.load(context,
@@ -165,7 +161,8 @@ public class KosherFoodModelFourPlate extends KosherFoodModel{
 	}
 
 	private void initDatabase() {
-		FoodsDataSource foodsDataSource = RoboGuice.getInjector(context).getInstance(FoodsDataSource.class);
+		FoodsDataSource foodsDataSource = RoboGuice.getInjector(context)
+				.getInstance(FoodsDataSource.class);
 		foodsDataSource.open();
 		foodsDataSource.truncateFoods();
 
@@ -215,7 +212,9 @@ public class KosherFoodModelFourPlate extends KosherFoodModel{
 
 		foodsDataSource.close();
 
-		NotKosherPairsDataSource notKosherPairsDataSource = RoboGuice.getInjector(context).getInstance(NotKosherPairsDataSource.class);
+		NotKosherPairsDataSource notKosherPairsDataSource = RoboGuice
+				.getInjector(context).getInstance(
+						NotKosherPairsDataSource.class);
 		notKosherPairsDataSource.open();
 		notKosherPairsDataSource.truncateNotKosherPairs();
 
@@ -242,5 +241,4 @@ public class KosherFoodModelFourPlate extends KosherFoodModel{
 		notKosherPairsDataSource.close();
 	}
 
-	
 }
