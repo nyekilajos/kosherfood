@@ -1,9 +1,6 @@
 package hu.bme.aut.amorg.nyekilajos.kosherfood.core;
 
 import hu.bme.aut.amorg.nyekilajos.kosherfood.database.KosherDbHelper;
-
-import java.io.IOException;
-
 import roboguice.RoboGuice;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -23,13 +20,9 @@ public class KosherFoodModelFourPlate extends KosherFoodModel {
 	public void initGame() {
 		initDrawableObjects();
 		initSounds();
-		try {
-			RoboGuice.getInjector(context).getInstance(KosherDbHelper.class)
-					.initDatabase();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+
+		RoboGuice.getInjector(context).getInstance(KosherDbHelper.class)
+				.initDatabase();
 	}
 
 	private void initDrawableObjects() {
