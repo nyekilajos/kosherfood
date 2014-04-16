@@ -1,9 +1,9 @@
 package hu.bme.aut.amorg.nyekilajos.kosherfood.core;
 
-import hu.bme.aut.amorg.nyekilajos.kosherfood.database.Foods;
-import hu.bme.aut.amorg.nyekilajos.kosherfood.database.FoodsDataSource;
-import hu.bme.aut.amorg.nyekilajos.kosherfood.database.NotKosherPairs;
-import hu.bme.aut.amorg.nyekilajos.kosherfood.database.NotKosherPairsDataSource;
+import hu.bme.aut.amorg.nyekilajos.kosherfood.database.KosherDbHelper;
+
+import java.io.IOException;
+
 import roboguice.RoboGuice;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -23,7 +23,13 @@ public class KosherFoodModelFourPlate extends KosherFoodModel {
 	public void initGame() {
 		initDrawableObjects();
 		initSounds();
-		initDatabase();
+		try {
+			RoboGuice.getInjector(context).getInstance(KosherDbHelper.class)
+					.initDatabase();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	private void initDrawableObjects() {
@@ -159,86 +165,4 @@ public class KosherFoodModelFourPlate extends KosherFoodModel {
 		soundIDs.add(soundPool.load(context,
 				hu.bme.aut.amorg.nyekilajos.kosherfood.R.raw.s03, 0));
 	}
-
-	private void initDatabase() {
-		FoodsDataSource foodsDataSource = RoboGuice.getInjector(context)
-				.getInstance(FoodsDataSource.class);
-		foodsDataSource.open();
-		foodsDataSource.truncateFoods();
-
-		Foods food = new Foods();
-
-		food.set_id(1);
-		food.setName("pig");
-		food.setIs_kosher(0);
-		food.setInformation("Jews must not eat pork!");
-		foodsDataSource.insert(food);
-
-		food.set_id(2);
-		food.setName("bug");
-		food.setIs_kosher(0);
-		food.setInformation("Jews must not eat bug!");
-		foodsDataSource.insert(food);
-
-		food.set_id(3);
-		food.setName("milk");
-		food.setIs_kosher(1);
-		food.setInformation("Jews can drink milk!");
-		foodsDataSource.insert(food);
-
-		food.set_id(4);
-		food.setName("chicken");
-		food.setIs_kosher(1);
-		food.setInformation("Jews can eat chicken!");
-		foodsDataSource.insert(food);
-
-		food.set_id(5);
-		food.setName("egg");
-		food.setIs_kosher(1);
-		food.setInformation("Jews can eat egg!");
-		foodsDataSource.insert(food);
-
-		food.set_id(6);
-		food.setName("fish");
-		food.setIs_kosher(1);
-		food.setInformation("Jews can eat fish!");
-		foodsDataSource.insert(food);
-
-		food.set_id(7);
-		food.setName("goose");
-		food.setIs_kosher(0);
-		food.setInformation("Jews must not eat goose!");
-		foodsDataSource.insert(food);
-
-		foodsDataSource.close();
-
-		NotKosherPairsDataSource notKosherPairsDataSource = RoboGuice
-				.getInjector(context).getInstance(
-						NotKosherPairsDataSource.class);
-		notKosherPairsDataSource.open();
-		notKosherPairsDataSource.truncateNotKosherPairs();
-
-		NotKosherPairs notKosherPairs = new NotKosherPairs();
-
-		notKosherPairs.setFood_first_id(3);
-		notKosherPairs.setFood_second_id(4);
-		notKosherPairs
-				.setInformation("Jews must not eat chicken and drink milk together!");
-		notKosherPairsDataSource.insert(notKosherPairs);
-
-		notKosherPairs.setFood_first_id(3);
-		notKosherPairs.setFood_second_id(5);
-		notKosherPairs
-				.setInformation("Jews must not eat egg and drink milk together!");
-		notKosherPairsDataSource.insert(notKosherPairs);
-
-		notKosherPairs.setFood_first_id(3);
-		notKosherPairs.setFood_second_id(6);
-		notKosherPairs
-				.setInformation("Jews must not eat fish and drink milk together!");
-		notKosherPairsDataSource.insert(notKosherPairs);
-
-		notKosherPairsDataSource.close();
-	}
-
 }

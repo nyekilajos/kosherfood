@@ -1,13 +1,13 @@
 package hu.bme.aut.amorg.nyekilajos.kosherfood.database;
 
+import java.io.IOException;
+
 import roboguice.RoboGuice;
-
-import com.google.inject.Inject;
-
-import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+
+import com.google.inject.Inject;
 
 public class NotKosherPairsDataSource implements DataSourceInterface {
 
@@ -27,37 +27,18 @@ public class NotKosherPairsDataSource implements DataSourceInterface {
 
 	@Override
 	public void open() {
-		database = kosherDbHelper.getWritableDatabase();
+		try {
+			database = kosherDbHelper.getDatabase();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 	}
 
 	@Override
 	public void close() {
 		kosherDbHelper.close();
-	}
-
-	public NotKosherPairs insert(NotKosherPairs notKosherPairs) {
-		ContentValues values = new ContentValues();
-		String nullString = null;
-		values.put(KosherDbHelper.COLUMN_ID, nullString);
-		values.put(KosherDbHelper.COLUMN_FOOD_ID_FIRST,
-				notKosherPairs.getFood_first_id());
-		values.put(KosherDbHelper.COLUMN_FOOD_ID_SECOND,
-				notKosherPairs.getFood_second_id());
-		values.put(KosherDbHelper.COLUMN_INFORMATION,
-				notKosherPairs.getInformation());
-		database.insert(KosherDbHelper.NOT_KOSHER_PAIRS_TABLE,
-				KosherDbHelper.COLUMN_ID, values);
-		return notKosherPairs;
-	}
-
-	public void delete(NotKosherPairs notKosherPairs) {
-		database.delete(
-				KosherDbHelper.NOT_KOSHER_PAIRS_TABLE,
-				KosherDbHelper.COLUMN_FOOD_ID_FIRST + "="
-						+ notKosherPairs.getFood_first_id() + "AND"
-						+ KosherDbHelper.COLUMN_FOOD_ID_SECOND + "="
-						+ notKosherPairs.getFood_second_id(), null);
 	}
 
 	/**
@@ -87,8 +68,7 @@ public class NotKosherPairsDataSource implements DataSourceInterface {
 							+ food_first_id, null, null, null, null);
 
 			// If there is still no result, then it is not in the database
-			if (cursor == null || cursor.getCount() == 0)
-			{
+			if (cursor == null || cursor.getCount() == 0) {
 				cursor.close();
 				return null;
 			}
@@ -105,16 +85,5 @@ public class NotKosherPairsDataSource implements DataSourceInterface {
 				.getColumnIndex(KosherDbHelper.COLUMN_INFORMATION)));
 		cursor.close();
 		return notKosherPairs;
-	}
-
-	public void truncateNotKosherPairs() {
-		try {
-			database.beginTransaction();
-			database.execSQL("delete from "
-					+ KosherDbHelper.NOT_KOSHER_PAIRS_TABLE + ";");
-			database.setTransactionSuccessful();
-		} finally {
-			database.endTransaction();
-		}
 	}
 }

@@ -24,9 +24,6 @@ public class MainActivity extends RoboActivity {
 	@InjectView(R.id.btn_help)
 	private Button btn_help;
 
-	@InjectView(R.id.btn_high_scores)
-	private Button btn_high_scores;
-
 	@InjectView(R.id.btn_exit)
 	private Button btn_exit;
 
@@ -48,18 +45,6 @@ public class MainActivity extends RoboActivity {
 				openSurface.setClass(getApplicationContext(),
 						KosherSurfaceActivity.class);
 				startActivity(openSurface);
-
-			}
-		});
-
-		btn_high_scores.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				Intent openHighScores = new Intent();
-				openHighScores.setClass(getApplicationContext(),
-						HighScoresActivity.class);
-				startActivity(openHighScores);
 
 			}
 		});
