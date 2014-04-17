@@ -1,19 +1,11 @@
 package hu.bme.aut.amorg.nyekilajos.kosherfood.database;
 
-import java.io.IOException;
-
-import roboguice.RoboGuice;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 
 import com.google.inject.Inject;
 
-public class NotKosherPairsDataSource implements DataSourceInterface {
-
-	@Inject
-	private KosherDbHelper kosherDbHelper;
-	private SQLiteDatabase database;
+public class NotKosherPairsDataSource extends AbstractKosherDataSource {
 
 	private final static String[] allColumns = {
 			KosherDbHelper.COLUMN_FOOD_ID_FIRST,
@@ -22,23 +14,7 @@ public class NotKosherPairsDataSource implements DataSourceInterface {
 
 	@Inject
 	public NotKosherPairsDataSource(Context context) {
-		RoboGuice.getInjector(context).injectMembers(this);
-	}
-
-	@Override
-	public void open() {
-		try {
-			database = kosherDbHelper.getDatabase();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-	}
-
-	@Override
-	public void close() {
-		kosherDbHelper.close();
+		super(context);
 	}
 
 	/**
