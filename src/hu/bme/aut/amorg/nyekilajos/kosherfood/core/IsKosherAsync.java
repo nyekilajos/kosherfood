@@ -13,12 +13,13 @@ public class IsKosherAsync extends RoboAsyncTask<Void> {
 	@Inject
 	public IsKosherAsync(Context context) {
 		super(context);
-		
+
 		this.plate = null;
 	}
 
-	public void setPlate(Plate _plate) {
+	public IsKosherAsync setPlate(Plate _plate) {
 		plate = _plate;
+		return this;
 	}
 
 	@Override

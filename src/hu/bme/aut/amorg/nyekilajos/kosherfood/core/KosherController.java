@@ -39,8 +39,9 @@ public class KosherController {
 		Log.d("DI", "KosherController created!");
 	}
 
-	public void setHolder(SurfaceHolder _holder) {
+	public KosherController setHolder(SurfaceHolder _holder) {
 		holder = _holder;
+		return this;
 	}
 
 	public void startGame() {

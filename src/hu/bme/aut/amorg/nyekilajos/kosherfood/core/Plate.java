@@ -59,7 +59,8 @@ public class Plate extends Drawable {
 	 * IsKosherAsync (AsyncTask) calls it in doInBackground function.
 	 **/
 	public KosherDbObj searchDatabase() {
-		FoodsDataSource foodsDataSource = RoboGuice.getInjector(context).getInstance(FoodsDataSource.class);
+		FoodsDataSource foodsDataSource = RoboGuice.getInjector(context)
+				.getInstance(FoodsDataSource.class);
 
 		foodsDataSource.open();
 
@@ -75,7 +76,9 @@ public class Plate extends Drawable {
 				return new KosherDbObj(false, foods.getInformation());
 		}
 
-		NotKosherPairsDataSource notKosherPairsDataSource = RoboGuice.getInjector(context).getInstance(NotKosherPairsDataSource.class);
+		NotKosherPairsDataSource notKosherPairsDataSource = RoboGuice
+				.getInjector(context).getInstance(
+						NotKosherPairsDataSource.class);
 
 		notKosherPairsDataSource.open();
 
@@ -96,7 +99,7 @@ public class Plate extends Drawable {
 		}
 
 		notKosherPairsDataSource.close();
-		if(foodDbObjList.size() != 0)
+		if (foodDbObjList.size() != 0)
 			return new KosherDbObj(true, foodDbObjList.get(0).getInformation());
 		else
 			return new KosherDbObj(true, "");
@@ -123,8 +126,7 @@ public class Plate extends Drawable {
 
 	public void addFoodToPlate(Food food) {
 		foodsInPlate.add(food);
-		isKosherAsync.setPlate(this);
-		isKosherAsync.execute();
+		isKosherAsync.setPlate(this).execute();
 	}
 
 	public List<Food> removeFoodsFromPlate() {
