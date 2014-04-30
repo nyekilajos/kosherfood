@@ -102,7 +102,7 @@ public class KosherDbHelper extends SQLiteOpenHelper {
 			}
 		else
 			try {
-				createDatabaseFromAssets();
+				getDatabase();
 			} catch (IOException e) {
 				Log.e(e.getMessage(), e.getStackTrace().toString());
 			}
