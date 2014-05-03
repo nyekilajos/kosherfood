@@ -19,7 +19,6 @@ import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.text.method.ScrollingMovementMethod;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.google.inject.Inject;
@@ -201,8 +200,8 @@ public class Plate extends Drawable {
 			}
 			canvas.translate((float) (this.getInnerRectF().left),
 					(float) (this.getInnerRectF().top));
-			layout.draw(canvas);
-			//staticLayout.draw(canvas);
+			//layout.draw(canvas);
+			staticLayout.draw(canvas);
 			canvas.restore();
 		}
 		

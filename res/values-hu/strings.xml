@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">KosherFood</string>
+    <string name="action_settings">Beállítások</string>
+    <string name="kosherfood">Kosher Food</string>
+    <string name="start">Start</string>
+    <string name="options">Beállítások</string>
+    <string name="exit">Kilépés</string>
+    <string name="title_activity_kosher_surface">KosherSurfaceActivity</string>
+    <string name="hello_world">Hello világ!</string>
+    <string name="title_activity_options">Beállítások</string>
+    <string name="title_activity_help">Segítség</string>
+    <string name="help">Segítség</string>
+    <string name="number_of_plates">Tányérok száma:</string>
+    <string name="one_plate">Egy tányér</string>
+    <string name="four_plate">Négy tányér</string>
+    <string name="enable_sounds">Hangok engedélyezve</string>
+</resources>

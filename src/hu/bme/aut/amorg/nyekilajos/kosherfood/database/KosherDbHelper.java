@@ -33,7 +33,8 @@ public class KosherDbHelper extends SQLiteOpenHelper {
 	public static final String COLUMN_ID = "_id";
 	public static final String COLUMN_NAME = "name";
 	public static final String COLUMN_IS_KOSHER = "is_kosher";
-	public static final String COLUMN_INFORMATION = "information";
+	public static final String COLUMN_INFORMATION_HU = "information_hu";
+	public static final String COLUMN_INFORMATION_EN = "information_en";
 
 	public static final String NOT_KOSHER_PAIRS_TABLE = "not_kosher_pairs";
 	public static final String COLUMN_FOOD_ID_FIRST = "food_id_first";
@@ -50,17 +51,6 @@ public class KosherDbHelper extends SQLiteOpenHelper {
 
 	private Context context;
 
-	protected static final String CREATE_FOODS = "create table " + FOODS_TABLE
-			+ "(" + COLUMN_ID + " integer primary key not null, " + COLUMN_NAME
-			+ " text not null, " + COLUMN_IS_KOSHER + " integer not null, "
-			+ COLUMN_INFORMATION + " text not null);";
-
-	protected static final String CREATE_NOT_KOSHER_PAIRS = "create table "
-			+ NOT_KOSHER_PAIRS_TABLE + "(" + COLUMN_ID
-			+ " integer primary key autoincrement, " + COLUMN_FOOD_ID_FIRST
-			+ " integer not null, " + COLUMN_FOOD_ID_SECOND
-			+ " integer not null, " + COLUMN_INFORMATION + " text not null);";
-
 	@Inject
 	public KosherDbHelper(Context context) {
 		super(context, DATABASE_NAME, null, DATATBASE_VERSION);
@@ -76,7 +66,7 @@ public class KosherDbHelper extends SQLiteOpenHelper {
 		try {
 			database = SQLiteDatabase.openDatabase(DATABASE_PATH
 					+ DATABASE_NAME, null, SQLiteDatabase.OPEN_READONLY);
-			if(database == null)
+			if (database == null)
 				Log.d("INITDB", "DB_NULL");
 			else
 				Log.d("INITDB", "DB_NOT_NULL");
@@ -119,9 +109,9 @@ public class KosherDbHelper extends SQLiteOpenHelper {
 	private void downloadDatabaseFromNetwork() throws IOException,
 			URISyntaxException {
 		// Log.d("DB", "Download database from network");
-		
+
 		this.getReadableDatabase();
-		
+
 		HttpGet httpGet = RoboGuice.getInjector(context).getInstance(
 				HttpGet.class);
 		httpGet.setURI(new URI(
