@@ -14,11 +14,11 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:screenOrientation="landscape"
         android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" >
         <activity
             android:name="hu.bme.aut.amorg.nyekilajos.kosherfood.activities.MainActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name"
+            android:screenOrientation="landscape" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

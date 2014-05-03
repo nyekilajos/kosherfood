@@ -8,7 +8,6 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 import roboguice.inject.ContextSingleton;
-import android.util.Log;
 
 @ContextSingleton
 public class TaskScheduler implements Runnable {
@@ -22,12 +21,12 @@ public class TaskScheduler implements Runnable {
 	private final int PERIODIC_DELAY_THREAD_GC = 1000;
 
 	public TaskScheduler() {
-		Log.d("DI", "TaskScheduler creation started...");
+		//Log.d("DI", "TaskScheduler creation started...");
 		scheduledExec = Executors.newScheduledThreadPool(THREAD_NUMBER);
 		scheduledExec.scheduleWithFixedDelay(this, 4000, PERIODIC_DELAY_THREAD_GC,
 				TimeUnit.MILLISECONDS);
 		scheduledTasks = new ArrayList<ScheduledItem>();
-		Log.d("DI", "TaskScheduler created!");
+		//Log.d("DI", "TaskScheduler created!");
 	}
 
 	@SuppressWarnings("unchecked")
@@ -36,22 +35,22 @@ public class TaskScheduler implements Runnable {
 			scheduledTasks.add(new ScheduledItem(scheduledTask, (ScheduledFuture<ScheduledTask>) scheduledExec
 					.scheduleAtFixedRate(scheduledTask, 0, PERIODIC_DELAY,
 							TimeUnit.MILLISECONDS)));
-			Log.d("Task Scheduler", "Task added!");
+			//Log.d("Task Scheduler", "Task added!");
 		}
 
 	}
 
 	@Override
 	public void run() {
-		Log.d("Task Scheduler", "Finished task detection...");
+		//Log.d("Task Scheduler", "Finished task detection...");
 		synchronized (scheduledTasks) {
-			Log.d("Task Scheduler", "Num of tasks: " + Integer.toString(scheduledTasks.size()));
+			//Log.d("Task Scheduler", "Num of tasks: " + Integer.toString(scheduledTasks.size()));
 			for (ScheduledItem scheduledItem : scheduledTasks) {
 				if (scheduledItem.getScheduledTask().isFinished())
 				{
 					scheduledItem.getScheduledFuture().cancel(true);
 					scheduledTasks.remove(scheduledItem);
-					Log.d("Task Scheduler", "Task deleted");
+					//Log.d("Task Scheduler", "Task deleted");
 				}
 			}
 				
@@ -74,7 +73,7 @@ public class TaskScheduler implements Runnable {
 				}
 			}*/
 		}
-		Log.d("Task Scheduler", "Finished task detection completed!");
+		//Log.d("Task Scheduler", "Finished task detection completed!");
 
 	}
 

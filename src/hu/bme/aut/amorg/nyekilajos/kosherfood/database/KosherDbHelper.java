@@ -76,8 +76,13 @@ public class KosherDbHelper extends SQLiteOpenHelper {
 		try {
 			database = SQLiteDatabase.openDatabase(DATABASE_PATH
 					+ DATABASE_NAME, null, SQLiteDatabase.OPEN_READONLY);
+			if(database == null)
+				Log.d("INITDB", "DB_NULL");
+			else
+				Log.d("INITDB", "DB_NOT_NULL");
 
 		} catch (SQLiteException e) {
+			Log.d("INITDB", "DB_NOT_EXISTS");
 			this.getReadableDatabase();
 			createDatabaseFromAssets();
 			database = SQLiteDatabase.openDatabase(DATABASE_PATH
@@ -88,11 +93,11 @@ public class KosherDbHelper extends SQLiteOpenHelper {
 	}
 
 	public void initDatabase() {
-		this.getReadableDatabase();
 		ConnectivityManager connectivityManager = (ConnectivityManager) context
 				.getSystemService(Context.CONNECTIVITY_SERVICE);
 		NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
-		if (networkInfo != null && networkInfo.isConnected() == true)
+		if (networkInfo != null && networkInfo.isConnected() == true) {
+			Log.d("INITDB", "ONLINE");
 			try {
 				downloadDatabaseFromNetwork();
 			} catch (IOException e) {
@@ -100,19 +105,23 @@ public class KosherDbHelper extends SQLiteOpenHelper {
 			} catch (URISyntaxException e) {
 				Log.e(e.getMessage(), e.getStackTrace().toString());
 			}
-		else
+		} else {
+			Log.d("INITDB", "OFFLINE");
 			try {
 				getDatabase();
 			} catch (IOException e) {
 				Log.e(e.getMessage(), e.getStackTrace().toString());
 			}
-
+		}
 		this.close();
 	}
 
 	private void downloadDatabaseFromNetwork() throws IOException,
 			URISyntaxException {
-		Log.d("DB", "Download database from network");
+		// Log.d("DB", "Download database from network");
+		
+		this.getReadableDatabase();
+		
 		HttpGet httpGet = RoboGuice.getInjector(context).getInstance(
 				HttpGet.class);
 		httpGet.setURI(new URI(
@@ -132,7 +141,7 @@ public class KosherDbHelper extends SQLiteOpenHelper {
 	}
 
 	private void createDatabaseFromAssets() throws IOException {
-		Log.d("DB", "Get database from file");
+		// Log.d("DB", "Get database from file");
 		InputStream is = context.getAssets().open(DATABASE_NAME);
 		createDatabase(is);
 		is.close();

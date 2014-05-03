@@ -1,7 +1,6 @@
 package hu.bme.aut.amorg.nyekilajos.kosherfood.core;
 
 import roboguice.inject.ContextSingleton;
-import android.util.Log;
 
 @ContextSingleton
 public class SurfaceSize {
@@ -9,8 +8,8 @@ public class SurfaceSize {
 	private int surfaceHeight;
 
 	public SurfaceSize() {
-		Log.d("DI", "SurfaceSize creation started...");
-		Log.d("DI", "SurfaceSize created!");
+		//Log.d("DI", "SurfaceSize creation started...");
+		//Log.d("DI", "SurfaceSize created!");
 	}
 
 	public void setSurfaceWidth(int surfaceWidth) {

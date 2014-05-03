@@ -3,7 +3,6 @@ package hu.bme.aut.amorg.nyekilajos.kosherfood.core;
 import roboguice.RoboGuice;
 import roboguice.inject.ContextSingleton;
 import android.content.Context;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.View;
@@ -28,15 +27,15 @@ public class KosherController {
 
 	@Inject
 	public KosherController(Context context) {
-		Log.d("DI", "KosherController creation started...");
-		if (context == null)
-			Log.d("DI", "Context null");
+		//Log.d("DI", "KosherController creation started...");
+		//if (context == null)
+		//	Log.d("DI", "Context null");
 		this.context = context;
 		kosherFoodModel = RoboGuice.getInjector(context).getInstance(
 				KosherFoodModel.class);
 		taskScheduler = RoboGuice.getInjector(context).getInstance(
 				TaskScheduler.class);
-		Log.d("DI", "KosherController created!");
+		//Log.d("DI", "KosherController created!");
 	}
 
 	public KosherController setHolder(SurfaceHolder _holder) {

@@ -12,11 +12,15 @@ import roboguice.RoboGuice;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.RectF;
 import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
-import android.util.Log;
+import android.text.method.ScrollingMovementMethod;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
+import android.widget.TextView;
 
 import com.google.inject.Inject;
 
@@ -34,7 +38,7 @@ public class Plate extends Drawable {
 
 	public Plate(int _id, float _init_x, float _init_y, Bitmap _picture,
 			float _width, float _height, Context context) {
-		Log.d("DI", "Plate creation started...");
+		//Log.d("DI", "Plate creation started...");
 		RoboGuice.getInjector(context).injectMembers(this);
 		this.context = context;
 		id = _id;
@@ -50,7 +54,7 @@ public class Plate extends Drawable {
 
 		kosherDbObj = new KosherDbObj(true, "");
 
-		Log.d("DI", "Plate created");
+		//Log.d("DI", "Plate created");
 	}
 
 	/**
@@ -163,7 +167,20 @@ public class Plate extends Drawable {
 					kosherDbObj.information, paint, (int) this.getInnerRectF()
 							.width(), Layout.Alignment.ALIGN_CENTER, 1, 1,
 					false);
-
+			
+			LinearLayout layout = new LinearLayout(context);
+			TextView tv = new TextView(context);
+			RectF irF = this.getInnerRectF(); 
+			tv.setTextColor(Color.RED);
+			tv.setText(kosherDbObj.information);
+			tv.setWidth((int)irF.width());
+			tv.setHeight((int)irF.height());
+			tv.setTextSize(10);
+			tv.setMovementMethod(new ScrollingMovementMethod());
+			layout.addView(tv);
+			layout.measure((int)irF.width(), (int)irF.height());
+			layout.layout((int)irF.left, (int)irF.top, (int)irF.right, (int)irF.bottom);
+			
 			canvas.save();
 			switch (this.id) {
 			case 11:
@@ -184,9 +201,11 @@ public class Plate extends Drawable {
 			}
 			canvas.translate((float) (this.getInnerRectF().left),
 					(float) (this.getInnerRectF().top));
-			staticLayout.draw(canvas);
+			layout.draw(canvas);
+			//staticLayout.draw(canvas);
 			canvas.restore();
 		}
+		
 	}
 
 	public boolean isKosher() {

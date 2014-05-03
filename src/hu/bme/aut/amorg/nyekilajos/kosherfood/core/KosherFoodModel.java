@@ -10,7 +10,6 @@ import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.media.SoundPool;
-import android.util.Log;
 
 import com.google.inject.Inject;
 
@@ -32,13 +31,13 @@ public abstract class KosherFoodModel {
 
 	@Inject
 	public KosherFoodModel(Context context) {
-		Log.d("DI", "KosherFoodModel creation started...");
+		//Log.d("DI", "KosherFoodModel creation started...");
 		this.context = context;
 		RoboGuice.getInjector(context).injectMembers(this);
 		soundIDs = new ArrayList<Integer>();
 		foods = new ArrayList<Food>();
 		plates = new ArrayList<Plate>();
-		Log.d("DI", "KosherFoodModel created!");
+		//Log.d("DI", "KosherFoodModel created!");
 	}
 
 	public List<Food> getFoods() {

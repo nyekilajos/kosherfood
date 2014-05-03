@@ -4,7 +4,6 @@ import roboguice.RoboGuice;
 import roboguice.inject.ContextSingleton;
 import android.content.Context;
 import android.graphics.Canvas;
-import android.util.Log;
 import android.view.SurfaceHolder;
 
 import com.google.inject.Inject;
@@ -21,9 +20,9 @@ public class ScheduledTaskRepaint extends ScheduledTask implements Runnable{
 
 	@Inject
 	public ScheduledTaskRepaint(Context context) {
-		Log.d("DI", "ScheduledTaskRepaint creation started...");
+		//Log.d("DI", "ScheduledTaskRepaint creation started...");
 		RoboGuice.getInjector(context).injectMembers(this);
-		Log.d("DI", "ScheduledTaskRepaint created!");
+		//Log.d("DI", "ScheduledTaskRepaint created!");
 	}
 
 	public ScheduledTaskRepaint setHolder(SurfaceHolder _holder) {

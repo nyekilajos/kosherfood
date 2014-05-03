@@ -3,7 +3,6 @@ package hu.bme.aut.amorg.nyekilajos.kosherfood.core;
 import roboguice.RoboGuice;
 import roboguice.inject.ContextSingleton;
 import android.content.Context;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -30,13 +29,13 @@ public class KosherSurface extends SurfaceView implements
 	@Inject
 	public KosherSurface(Context context) {
 		super(context);
-		Log.d("DI", "KosherSurface creation started...");
+		//Log.d("DI", "KosherSurface creation started...");
 		surfaceSize = RoboGuice.getInjector(context).getInstance(SurfaceSize.class);
 		kosherController = RoboGuice.getInjector(context).getInstance(KosherController.class);
 		initGameAsync = RoboGuice.getInjector(context).getInstance(InitGameAsync.class);
 		holder = getHolder();
 		holder.addCallback(this);
-		Log.d("DI", "KosherSurface created!");
+		//Log.d("DI", "KosherSurface created!");
 	}
 
 	@Override

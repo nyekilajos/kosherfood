@@ -1,6 +1,5 @@
 package hu.bme.aut.amorg.nyekilajos.kosherfood.core;
 
-import android.util.Log;
 
 public class ScheduledTaskNewPlate extends ScheduledTask implements Runnable {
 
@@ -14,7 +13,7 @@ public class ScheduledTaskNewPlate extends ScheduledTask implements Runnable {
 	
 	public ScheduledTaskNewPlate()
 	{
-		Log.d("Task Scheduler", "ScheduledTaskNewPlate created");
+		//Log.d("Task Scheduler", "ScheduledTaskNewPlate created");
 	}
 
 	public ScheduledTaskNewPlate setPlate(Plate plate) {
@@ -38,7 +37,7 @@ public class ScheduledTaskNewPlate extends ScheduledTask implements Runnable {
 		else
 			directionY = 0;
 
-		Log.d("Task Scheduler", "Plate set");
+		//Log.d("Task Scheduler", "Plate set");
 		return this;
 	}
 
@@ -56,7 +55,7 @@ public class ScheduledTaskNewPlate extends ScheduledTask implements Runnable {
 				else
 					directionX = 0;
 			} else {
-				Log.d("Task Scheduler", "destX,actualX: " + Float.toString(destinationX) + Float.toString(plate.getX()));
+				//Log.d("Task Scheduler", "destX,actualX: " + Float.toString(destinationX) + Float.toString(plate.getX()));
 				if (destinationX < plate.getX()) {
 					plate.moveRelative(-1, 0);
 				} else
@@ -84,7 +83,7 @@ public class ScheduledTaskNewPlate extends ScheduledTask implements Runnable {
 				return true;
 			}
 		}
-		Log.d("Task Scheduler", "ScheduledTask finished");
+		//Log.d("Task Scheduler", "ScheduledTask finished");
 		return false;
 	}
 

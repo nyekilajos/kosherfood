@@ -5,7 +5,6 @@ import roboguice.inject.ContextSingleton;
 import roboguice.util.RoboAsyncTask;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.util.Log;
 
 import com.google.inject.Inject;
 
@@ -23,10 +22,10 @@ public class InitGameAsync extends RoboAsyncTask<Void> {
 	@Inject
 	public InitGameAsync(Context context) {
 		super(context);
-		Log.d("DI", "InitGameAsync creation started...");
+		//Log.d("DI", "InitGameAsync creation started...");
 		RoboGuice.getInjector(context).injectMembers(this);
 		progressDialog = new ProgressDialog(context);
-		Log.d("DI", "InitGameAsync created");
+		//Log.d("DI", "InitGameAsync created");
 
 	}
 
