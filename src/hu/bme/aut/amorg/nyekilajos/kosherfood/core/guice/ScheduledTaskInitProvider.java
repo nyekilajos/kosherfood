@@ -25,7 +25,7 @@ public class ScheduledTaskInitProvider implements Provider<ScheduledTaskInit>{
 	public ScheduledTaskInit get() {
 		switch (settings.getPlayerNum()) {
 		case 1:
-			return new ScheduledTaskInitOnePlate();
+			return new ScheduledTaskInitOnePlate(kosherFoodModel, surfaceSize);
 		default:
 			return new ScheduledTaskInitFourPlate(kosherFoodModel, surfaceSize);
 		}
