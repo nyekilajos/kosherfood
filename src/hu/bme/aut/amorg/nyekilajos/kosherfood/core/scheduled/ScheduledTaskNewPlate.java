@@ -1,4 +1,6 @@
-package hu.bme.aut.amorg.nyekilajos.kosherfood.core;
+package hu.bme.aut.amorg.nyekilajos.kosherfood.core.scheduled;
+
+import hu.bme.aut.amorg.nyekilajos.kosherfood.core.drawable.Plate;
 
 
 public class ScheduledTaskNewPlate extends ScheduledTask implements Runnable {

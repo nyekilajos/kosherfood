@@ -1,4 +1,8 @@
-package hu.bme.aut.amorg.nyekilajos.kosherfood.core;
+package hu.bme.aut.amorg.nyekilajos.kosherfood.core.control;
+
+import hu.bme.aut.amorg.nyekilajos.kosherfood.core.SurfaceSize;
+import hu.bme.aut.amorg.nyekilajos.kosherfood.core.drawable.Food;
+import hu.bme.aut.amorg.nyekilajos.kosherfood.core.drawable.Plate;
 
 import java.util.ArrayList;
 import java.util.List;

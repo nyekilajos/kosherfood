@@ -1,4 +1,8 @@
-package hu.bme.aut.amorg.nyekilajos.kosherfood.core;
+package hu.bme.aut.amorg.nyekilajos.kosherfood.core.scheduled;
+
+import hu.bme.aut.amorg.nyekilajos.kosherfood.core.SurfaceSize;
+import hu.bme.aut.amorg.nyekilajos.kosherfood.core.control.KosherFoodModel;
+import hu.bme.aut.amorg.nyekilajos.kosherfood.core.drawable.Plate;
 
 import com.google.inject.Inject;
 

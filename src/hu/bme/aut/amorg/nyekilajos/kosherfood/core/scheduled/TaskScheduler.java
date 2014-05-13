@@ -1,4 +1,4 @@
-package hu.bme.aut.amorg.nyekilajos.kosherfood.core;
+package hu.bme.aut.amorg.nyekilajos.kosherfood.core.scheduled;
 
 import java.util.ArrayList;
 import java.util.List;

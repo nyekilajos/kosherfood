@@ -1,5 +1,7 @@
-package hu.bme.aut.amorg.nyekilajos.kosherfood.core;
+package hu.bme.aut.amorg.nyekilajos.kosherfood.core.drawable;
 
+import hu.bme.aut.amorg.nyekilajos.kosherfood.core.KosherDbObj;
+import hu.bme.aut.amorg.nyekilajos.kosherfood.core.control.IsKosherAsync;
 import hu.bme.aut.amorg.nyekilajos.kosherfood.database.Foods;
 import hu.bme.aut.amorg.nyekilajos.kosherfood.database.FoodsDataSource;
 import hu.bme.aut.amorg.nyekilajos.kosherfood.database.NotKosherPairs;

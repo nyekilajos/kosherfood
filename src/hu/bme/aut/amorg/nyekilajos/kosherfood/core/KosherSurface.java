@@ -1,5 +1,7 @@
 package hu.bme.aut.amorg.nyekilajos.kosherfood.core;
 
+import hu.bme.aut.amorg.nyekilajos.kosherfood.core.control.InitGameAsync;
+import hu.bme.aut.amorg.nyekilajos.kosherfood.core.control.KosherController;
 import roboguice.RoboGuice;
 import roboguice.inject.ContextSingleton;
 import android.content.Context;

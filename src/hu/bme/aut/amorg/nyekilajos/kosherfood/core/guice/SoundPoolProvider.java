@@ -1,5 +1,7 @@
-package hu.bme.aut.amorg.nyekilajos.kosherfood.core;
+package hu.bme.aut.amorg.nyekilajos.kosherfood.core.guice;
 
+import hu.bme.aut.amorg.nyekilajos.kosherfood.core.Settings;
+import hu.bme.aut.amorg.nyekilajos.kosherfood.core.SoundPoolNull;
 import android.media.AudioManager;
 import android.media.SoundPool;
 

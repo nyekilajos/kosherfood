@@ -1,4 +1,6 @@
-package hu.bme.aut.amorg.nyekilajos.kosherfood.core;
+package hu.bme.aut.amorg.nyekilajos.kosherfood.core.guice;
+import hu.bme.aut.amorg.nyekilajos.kosherfood.core.control.KosherFoodModel;
+import hu.bme.aut.amorg.nyekilajos.kosherfood.core.scheduled.ScheduledTaskInit;
 import roboguice.inject.ContextSingleton;
 import android.media.SoundPool;
 

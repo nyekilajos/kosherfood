@@ -1,4 +1,4 @@
-package hu.bme.aut.amorg.nyekilajos.kosherfood.core;
+package hu.bme.aut.amorg.nyekilajos.kosherfood.core.control;
 
 import android.content.Context;
 

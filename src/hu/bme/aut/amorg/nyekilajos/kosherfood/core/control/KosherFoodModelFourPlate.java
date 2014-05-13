@@ -1,5 +1,7 @@
-package hu.bme.aut.amorg.nyekilajos.kosherfood.core;
+package hu.bme.aut.amorg.nyekilajos.kosherfood.core.control;
 
+import hu.bme.aut.amorg.nyekilajos.kosherfood.core.drawable.Food;
+import hu.bme.aut.amorg.nyekilajos.kosherfood.core.drawable.Plate;
 import hu.bme.aut.amorg.nyekilajos.kosherfood.database.KosherDbHelper;
 import roboguice.RoboGuice;
 import android.content.Context;

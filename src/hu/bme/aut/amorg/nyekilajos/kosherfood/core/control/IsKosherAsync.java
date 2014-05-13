@@ -1,4 +1,7 @@
-package hu.bme.aut.amorg.nyekilajos.kosherfood.core;
+package hu.bme.aut.amorg.nyekilajos.kosherfood.core.control;
+
+import hu.bme.aut.amorg.nyekilajos.kosherfood.core.KosherDbObj;
+import hu.bme.aut.amorg.nyekilajos.kosherfood.core.drawable.Plate;
 
 import com.google.inject.Inject;
 

@@ -1,5 +1,9 @@
-package hu.bme.aut.amorg.nyekilajos.kosherfood.core;
+package hu.bme.aut.amorg.nyekilajos.kosherfood.core.guice;
 
+import hu.bme.aut.amorg.nyekilajos.kosherfood.core.Settings;
+import hu.bme.aut.amorg.nyekilajos.kosherfood.core.control.KosherFoodModel;
+import hu.bme.aut.amorg.nyekilajos.kosherfood.core.control.KosherFoodModelFourPlate;
+import hu.bme.aut.amorg.nyekilajos.kosherfood.core.control.KosherFoodModelOnePlate;
 import android.content.Context;
 
 import com.google.inject.Inject;

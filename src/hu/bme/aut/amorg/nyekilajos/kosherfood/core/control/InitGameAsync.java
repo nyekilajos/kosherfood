@@ -1,4 +1,4 @@
-package hu.bme.aut.amorg.nyekilajos.kosherfood.core;
+package hu.bme.aut.amorg.nyekilajos.kosherfood.core.control;
 
 import roboguice.RoboGuice;
 import roboguice.inject.ContextSingleton;

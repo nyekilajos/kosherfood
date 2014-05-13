@@ -1,5 +1,6 @@
-package hu.bme.aut.amorg.nyekilajos.kosherfood.core;
+package hu.bme.aut.amorg.nyekilajos.kosherfood.core.scheduled;
 
+import hu.bme.aut.amorg.nyekilajos.kosherfood.core.control.KosherFoodModel;
 import roboguice.RoboGuice;
 import roboguice.inject.ContextSingleton;
 import android.content.Context;

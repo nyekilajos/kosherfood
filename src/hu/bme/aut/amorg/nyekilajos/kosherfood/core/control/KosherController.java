@@ -1,5 +1,11 @@
-package hu.bme.aut.amorg.nyekilajos.kosherfood.core;
+package hu.bme.aut.amorg.nyekilajos.kosherfood.core.control;
 
+import hu.bme.aut.amorg.nyekilajos.kosherfood.core.drawable.Food;
+import hu.bme.aut.amorg.nyekilajos.kosherfood.core.drawable.Plate;
+import hu.bme.aut.amorg.nyekilajos.kosherfood.core.scheduled.ScheduledTaskInit;
+import hu.bme.aut.amorg.nyekilajos.kosherfood.core.scheduled.ScheduledTaskNewPlate;
+import hu.bme.aut.amorg.nyekilajos.kosherfood.core.scheduled.ScheduledTaskRepaint;
+import hu.bme.aut.amorg.nyekilajos.kosherfood.core.scheduled.TaskScheduler;
 import roboguice.RoboGuice;
 import roboguice.inject.ContextSingleton;
 import android.content.Context;

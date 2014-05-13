@@ -1,4 +1,4 @@
-package hu.bme.aut.amorg.nyekilajos.kosherfood.core;
+package hu.bme.aut.amorg.nyekilajos.kosherfood.core.scheduled;
 
 public class ScheduledTaskInitOnePlate extends ScheduledTaskInit implements
 		Runnable {

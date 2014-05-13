@@ -1,4 +1,4 @@
-package hu.bme.aut.amorg.nyekilajos.kosherfood.core;
+package hu.bme.aut.amorg.nyekilajos.kosherfood.core.drawable;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
