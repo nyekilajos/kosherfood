@@ -47,7 +47,7 @@ public class KosherFoodModelOnePlate extends KosherFoodModel {
 
 			foods.add(new Food(
 					2,
-					"carrot",
+					"bug",
 					300,
 					50,
 					BitmapFactory.decodeResource(
@@ -127,6 +127,14 @@ public class KosherFoodModelOnePlate extends KosherFoodModel {
 				hu.bme.aut.amorg.nyekilajos.kosherfood.R.raw.s02, 0));
 		soundIDs.add(soundPool.load(context,
 				hu.bme.aut.amorg.nyekilajos.kosherfood.R.raw.s03, 0));
+		soundIDs.add(soundPool.load(context,
+				hu.bme.aut.amorg.nyekilajos.kosherfood.R.raw.s04, 0));
+		soundIDs.add(soundPool.load(context,
+				hu.bme.aut.amorg.nyekilajos.kosherfood.R.raw.s05, 0));
+		soundIDs.add(soundPool.load(context,
+				hu.bme.aut.amorg.nyekilajos.kosherfood.R.raw.s06, 0));
+		soundIDs.add(soundPool.load(context,
+				hu.bme.aut.amorg.nyekilajos.kosherfood.R.raw.s07, 0));
 	}
 
 }

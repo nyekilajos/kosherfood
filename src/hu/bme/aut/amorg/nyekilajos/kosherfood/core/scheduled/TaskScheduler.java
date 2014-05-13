@@ -17,7 +17,7 @@ public class TaskScheduler implements Runnable {
 	
 	private ScheduledExecutorService scheduledExec;
 	private final int THREAD_NUMBER = 4;
-	private final int PERIODIC_DELAY = 40;
+	private final int PERIODIC_DELAY = 20;
 	private final int PERIODIC_DELAY_THREAD_GC = 1000;
 
 	public TaskScheduler() {
